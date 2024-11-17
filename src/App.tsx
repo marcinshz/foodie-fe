@@ -1,10 +1,26 @@
 import './App.scss'
+import {
+    createBrowserRouter,
+    RouterProvider,
+    Link,
+} from "react-router-dom";
 
 function App() {
+
+    const router = createBrowserRouter([
+        {
+            path: "/",
+            element: (
+                <div>
+                    <h1>Hello World</h1>
+                    <Link to="about">About Us</Link>
+                </div>
+            ),
+        },
+    ]);
+
   return (
-    <>
-        Hello world
-    </>
+      <RouterProvider router={router} />
   )
 }
 

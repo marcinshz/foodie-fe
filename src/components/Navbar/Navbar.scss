@@ -1,0 +1,27 @@
+@import '../../variables.scss';
+
+.navbar{
+  background:$color-navy-dark;
+  color:#fff;
+  padding:1rem 0;
+  width:100vw;
+
+  &__container{
+    display:flex;
+    max-width: 1400px;
+    margin:0 auto;
+
+    &__identity{
+      display:flex;
+      align-items:center;
+      gap:1rem;
+      text-decoration: none;
+      color:#fff;
+
+      &__name{
+        font-size:3rem;
+        font-weight:500;
+      }
+    }
+  }
+}
