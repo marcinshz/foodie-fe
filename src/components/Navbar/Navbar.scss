@@ -1,0 +1,123 @@
+@import '../../variables.scss';
+
+.navbar{
+  $parent:&;
+  background:$color-navy-dark;
+  color:#fff;
+  padding:1rem 0;
+  width:100%;
+  display: flex;
+  align-items: center;
+
+  &__container{
+    display:flex;
+    max-width: 1400px;
+
+    div:first-child{
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    &__identity{
+      display:flex;
+      align-items:center;
+      gap:1rem;
+      text-decoration: none;
+      color:#fff;
+
+      &__name{
+        font-size:3rem;
+        font-weight:500;
+      }
+    }
+
+    &__menu{
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+
+      &__links{
+        display: flex;
+        gap:1rem;
+        align-items: center;
+
+        &__item{
+          text-decoration: none;
+          color:#fff;
+          text-transform: uppercase;
+        }
+      }
+    }
+
+    &__toggle{
+      display: none;
+    }
+  }
+
+  &--open{
+    height: 100vh;
+    position: absolute;
+    align-items: flex-start;
+
+    #{$parent}__container{
+      flex-direction: column;
+      gap:4rem;
+
+      &__menu{
+        display: flex;
+        flex-direction: column;
+        gap:4rem;
+
+        &__links{
+          flex-direction: column;
+          gap:3rem;
+        }
+
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .navbar{
+    &__container{
+      &__identity{
+        display:flex;
+        align-items:center;
+        gap:1rem;
+        text-decoration: none;
+        color:#fff;
+
+        svg{
+          width: 3rem;
+          height: 3rem;
+        }
+
+        &__name{
+          font-size:2rem;
+          font-weight:400;
+        }
+      }
+
+      &__toggle{
+        display: initial;
+        background: transparent;
+        padding:0;
+        margin:0;
+        border:none;
+        color:#fff;
+        cursor: pointer;
+      }
+
+      &__menu{
+        display: none;
+
+        &--open{
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    }
+  }
+}
