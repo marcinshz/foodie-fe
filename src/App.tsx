@@ -5,6 +5,7 @@ import {
     Navigate,
 } from "react-router-dom";
 import AuthPage from "./pages/AuthPage/AuthPage.tsx";
+import HomePage from "./pages/HomePage/HomePage.tsx";
 import AuthProvider from 'react-auth-kit';
 import {store} from "./auth.ts";
 import AuthorizedLayout from "./layouts/AuthorizedLayout.tsx";
@@ -21,7 +22,7 @@ function App() {
             path: "/authorized",
             element: <AuthorizedLayout/>,
             children: [
-                {path: '/authorized/', element: <div className={"container"}>home</div>}
+                {path: '/authorized/', element: <HomePage/>}
             ]
         },
         {

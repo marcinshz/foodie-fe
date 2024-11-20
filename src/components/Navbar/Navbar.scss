@@ -27,8 +27,8 @@
       color:#fff;
 
       &__name{
-        font-size:3rem;
-        font-weight:500;
+        font-size:2rem;
+        font-weight:300;
       }
     }
 
@@ -58,6 +58,7 @@
   &--open{
     height: 100vh;
     position: absolute;
+    z-index: 9999;
     align-items: flex-start;
 
     #{$parent}__container{

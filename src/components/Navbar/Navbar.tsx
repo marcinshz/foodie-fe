@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Button from "@mui/material/Button";
 import clsx from 'clsx'
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
+import Logo from '../common/logo.tsx';
 function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
     const signOut = useSignOut()
@@ -15,7 +16,8 @@ function Navbar() {
             <div className="navbar__container container">
                 <div>
                     <a href="/" className="navbar__container__identity">
-                        <RamenDiningIcon sx={{width: "64px", height: "64px"}}/>
+                        {/*<RamenDiningIcon sx={{width: "64px", height: "64px"}}/>*/}
+                        <Logo/>
                         <div className="navbar__container__identity__name">Foodie</div>
                     </a>
                     <button className="navbar__container__toggle" onClick={() => setMenuOpen(!menuOpen)}>
