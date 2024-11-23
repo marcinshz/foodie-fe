@@ -17,6 +17,7 @@ const SingleDishRequirementsTasteStepInputs = [
     },
     {
         label:"Cuisine",
+        key: "cuisine",
         description: "What cuisine are you interested in?",
         type: RequirementsFormInputTypes.List
     }

@@ -19,9 +19,6 @@ function RequirementsForm({type}: RequirementsFormProps) {
     const handleSubmit = () => {}
 
     const handleChange = (key:string, value:string | number | boolean | string[] | DishDifficulty | MealType) => {
-        console.log('key', key)
-        console.log('value', value)
-
         setFormState((prevState) => {
             return {...prevState, [key]: value}
         })

@@ -4,19 +4,28 @@ import {DishDifficulty, MealType} from "../../../../enums.ts";
 import AddIcon from '@mui/icons-material/Add';
 import {IconButton} from "@mui/material";
 import {useState} from "react";
+import _ from 'lodash';
+import Chip from '@mui/material/Chip';
+
 
 type ListInputProps = {
     label: string;
-    key:string;
+    stateKey:string;
     description: string;
     handleChange: (key:string, value:string | number | boolean | string[] | DishDifficulty | MealType) => void;
     values: string[];
 }
-function ListInput({label, key, description, handleChange, values}: ListInputProps) {
+function ListInput({label, stateKey, description, handleChange, values}: ListInputProps) {
     const [value, setValue] = useState('');
 
     const handleSubmit = () => {
-        handleChange(key, values.concat(value));
+        handleChange(stateKey, values.concat(value));
+    }
+
+    const handleDelete = (index: number) => {
+        let newValues = _.cloneDeep(values);
+        newValues.splice(index, 1);
+        handleChange(stateKey, newValues);
     }
 
     return (
@@ -31,13 +40,11 @@ function ListInput({label, key, description, handleChange, values}: ListInputPro
                     <AddIcon/>
                 </IconButton>
             </div>
-            <ul className="list-input__list">
-                {values && values.map((value) => (
-                    <li key={value} className="list-input__list__item">
-                        {value}
-                    </li>
+            <div className="list-input__list">
+                {values && values.map((value, index) => (
+                    <Chip label={value} onDelete={() => handleDelete(index)} />
                 ))}
-            </ul>
+            </div>
         </div>
     );
 }
