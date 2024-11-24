@@ -10,6 +10,7 @@ import AuthProvider from 'react-auth-kit';
 import {store} from "./auth.ts";
 import AuthorizedLayout from "./layouts/AuthorizedLayout.tsx";
 import Navbar from "./components/Navbar/Navbar.tsx";
+import SingleDishPage from "./pages/SingleDishPage/SingleDishPage.tsx";
 
 function App() {
 
@@ -22,7 +23,8 @@ function App() {
             path: "/authorized",
             element: <AuthorizedLayout/>,
             children: [
-                {path: '/authorized/', element: <HomePage/>}
+                {path: '/authorized/', element: <HomePage/>},
+                {path:'/authorized/single-dish', element: <SingleDishPage/>}
             ]
         },
         {

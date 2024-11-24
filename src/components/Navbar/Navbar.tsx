@@ -6,7 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Button from "@mui/material/Button";
 import clsx from 'clsx'
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
-import Logo from '../common/logo.tsx';
+import Logo from '../iconComponents/logo.tsx';
 function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
     const signOut = useSignOut()
