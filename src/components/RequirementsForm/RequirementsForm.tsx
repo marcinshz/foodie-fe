@@ -16,17 +16,15 @@ type RequirementsFormProps = {
 function RequirementsForm({type}: RequirementsFormProps) {
     const [step, setStep] = useState(0);
     const [formState, setFormState] = useState(getRequirementsFormState(type));
-    const handleSubmit = () => {}
+    const handleSubmit = () => {
+        console.log('submit', formState)
+    }
 
     const handleChange = (key:string, value:string | number | boolean | string[] | DishDifficulty | MealType) => {
         setFormState((prevState) => {
             return {...prevState, [key]: value}
         })
     }
-
-    useEffect(() => {
-        console.log('formState', formState)
-    }, [formState]);
 
     return (
         <div className="requirements-form">

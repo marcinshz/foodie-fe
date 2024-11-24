@@ -1,6 +1,10 @@
 import {DishDifficulty, MealType, RequirementsFormInputTypes} from "../../../../enums.ts";
 import ListInput from "../ListInput/ListInput.tsx";
 import {useEffect} from "react";
+import TextInput from "../TextInput/TextInput.tsx";
+import CheckboxInput from "../CheckboxInput/CheckboxInput.tsx";
+import NumberInput from "../NumberInput/NumberInput.tsx";
+import SelectInput from "../SelectInput/SelectInput.tsx";
 
 type InputWrapperProps = {
     type: RequirementsFormInputTypes;
@@ -22,9 +26,42 @@ function InputWrapper({type,stateKey, label,description, value, handleChange}: I
                     values={value as string[]}
                 />
             }
-            {type === RequirementsFormInputTypes.Text && <></> }
-            {type === RequirementsFormInputTypes.Select && <></> }
-            {type === RequirementsFormInputTypes.Boolean && <></> }
+            {type === RequirementsFormInputTypes.Text &&
+                <TextInput
+                    label={label}
+                    stateKey={stateKey}
+                    description={description}
+                    handleChange={handleChange}
+                    value={value as string}
+                />
+            }
+            {type === RequirementsFormInputTypes.Boolean &&
+                <CheckboxInput
+                    stateKey={stateKey}
+                    label={label}
+                    description={description}
+                    handleChange={handleChange}
+                    value={value as boolean}
+                />
+            }
+            {type === RequirementsFormInputTypes.Number &&
+                <NumberInput
+                    stateKey={stateKey}
+                    label={label}
+                    description={description}
+                    handleChange={handleChange}
+                    value={value as number}
+                />
+            }
+            {type === RequirementsFormInputTypes.Select &&
+                <SelectInput
+                    stateKey={stateKey}
+                    label={label}
+                    description={description}
+                    handleChange={handleChange}
+                    value={value as DishDifficulty | MealType}
+                />
+            }
         </>
     );
 }
