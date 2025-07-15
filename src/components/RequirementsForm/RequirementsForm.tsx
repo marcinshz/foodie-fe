@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import Plate from "../iconComponents/plate.tsx";
 import RequirementsFormStep from "./RequirementsFormStep/RequirementsFormStep.tsx";
 import Button from "@mui/material/Button";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Step, StepLabel, Stepper} from "@mui/material";
 import {SingleDishRequirementsSteps} from "../../constants.ts";
 import {getRequirementsFormState} from "./RequirementsFormStep/formStepTemplates.ts";
@@ -35,7 +35,7 @@ function RequirementsForm({type}: RequirementsFormProps) {
                 </div>
                 <div className="requirements-form__header__invite-to-inspiration">
                     <p>Wanna skip questions? Click on the plate and try our inspo feature!</p>
-                    <Link to={'/authorized/inspiration'}>
+                    <Link to={'/home/inspiration'}>
                         <div className="requirements-form__header__invite-to-inspiration__plate">
                             <Plate/>
                         </div>

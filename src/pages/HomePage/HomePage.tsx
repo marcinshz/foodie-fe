@@ -2,12 +2,9 @@ import homehero1 from "../../assets/img/homehero1.jpg";
 import homehero2 from "../../assets/img/homehero2.jpg";
 import homehero3 from "../../assets/img/homehero3.jpg";
 import './HomePage.scss'
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import FeatureCard from "./FeatureCard/FeatureCard.tsx";
 function HomePage() {
     let name = "Claude";
-    const auth = useAuthUser()
-    //name=auth.name
 
     return (
         <div className="home-page container">
@@ -32,9 +29,9 @@ function HomePage() {
             <div className="home-page__features">
                 <h1 className="home-page__features__header">What do you need today?</h1>
                 <div className="home-page__features__grid">
-                    <FeatureCard header="Single dish" paragraph="Find the perfect recipe for any occasion! Explore a variety of dishes with clear instructions to suit your cravings." path="/authorized/single-dish" icon="restaurant"/>
-                    <FeatureCard header="Meal plan" paragraph="Take the stress out of planning meals! Build weekly or monthly menus and get organized in no time." path="/authorized/meal-plan" icon="calendar_month"/>
-                    <FeatureCard header="Random inspiration" paragraph="Stuck on what to cook? Let us surprise you! Discover a new recipe and spice up your culinary routine with exciting ideas." path="/authorized/inspiration" icon="lightbulb"/>
+                    <FeatureCard header="Single dish" paragraph="Find the perfect recipe for any occasion! Explore a variety of dishes with clear instructions to suit your cravings." path="/home/single-dish" icon="restaurant"/>
+                    <FeatureCard header="Meal plan" paragraph="Take the stress out of planning meals! Build weekly or monthly menus and get organized in no time." path="/home/meal-plan" icon="calendar_month"/>
+                    <FeatureCard header="Random inspiration" paragraph="Stuck on what to cook? Let us surprise you! Discover a new recipe and spice up your culinary routine with exciting ideas." path="/home/inspiration" icon="lightbulb"/>
                 </div>
             </div>
         </div>
