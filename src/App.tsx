@@ -1,13 +1,7 @@
 import './App.scss'
-import {
-    createBrowserRouter,
-    RouterProvider,
-    Navigate,
-} from "react-router-dom";
+import {createBrowserRouter, Navigate, RouterProvider,} from "react-router-dom";
 import AuthPage from "./pages/AuthPage/AuthPage.tsx";
 import HomePage from "./pages/HomePage/HomePage.tsx";
-import AuthProvider from 'react-auth-kit';
-import {store} from "./auth.ts";
 import AuthorizedLayout from "./layouts/AuthorizedLayout.tsx";
 import Navbar from "./components/Navbar/Navbar.tsx";
 import SingleDishPage from "./pages/SingleDishPage/SingleDishPage.tsx";
@@ -20,25 +14,25 @@ function App() {
             element: <AuthPage/>,
         },
         {
-            path: "/authorized",
+            path: "/home",
             element: <AuthorizedLayout/>,
             children: [
-                {path: '/authorized/', element: <HomePage/>},
-                {path:'/authorized/single-dish', element: <SingleDishPage/>}
+                {path: '/home/', element: <HomePage/>},
+                {path: '/home/single-dish', element: <SingleDishPage/>}
             ]
         },
         {
-            path:"*",
-            element: <Navigate to={'/authorized'}/>
+            path: "*",
+            element: <Navigate to={'/home'}/>
         }
     ]);
 
-  return (
-      <AuthProvider store={store}>
-        <Navbar/>
-        <RouterProvider router={router} />
-      </AuthProvider>
-  )
+    return (
+        <>
+            <Navbar/>
+            <RouterProvider router={router}/>
+        </>
+    )
 }
 
 export default App

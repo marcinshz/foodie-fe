@@ -1,18 +1,15 @@
-import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated'
 import {Outlet, useNavigate} from 'react-router-dom';
+import {useAppStore} from "../store.ts";
 import {useEffect} from "react";
-import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 function AuthorizedLayout() {
-    const isAuthenticated = useIsAuthenticated()
-    const auth = useAuthUser()
     const navigate = useNavigate();
+    const authData = useAppStore((state) => state.authData);
 
-    //todo check why isauthenticated always returns false (maybe try @auth-kit/react-router)
     useEffect(() => {
-        console.log('isAuthenticated', isAuthenticated)
-        console.log('auth', auth)
-        //if(!isAuthenticated)    navigate('/auth');
-    }, [isAuthenticated]);
+        if(!authData) {
+            navigate('/auth');
+        }
+    }, [authData]);
 
     return (
         <Outlet />
