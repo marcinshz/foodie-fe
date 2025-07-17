@@ -1,24 +1,24 @@
 export enum RequirementTypes {
-    SingleDish,
-    MealPlan
+    SingleDish = 'SingleDish',
+    MealPlan = 'MealPlan'
 }
 
-export enum DishDifficulty{
+export enum DishDifficulty {
     Easy = 'Easy',
     Casual = 'Casual',
     Hard = 'Hard'
 }
 
-export enum MealType{
-    Breakfast,
-    Lunch,
-    Dinner,
-    Snack,
-    Desert,
-    Any
+export enum MealType {
+    Breakfast = 'Breakfast',
+    Lunch = 'Lunch',
+    Dinner = 'Dinner',
+    Snack = 'Snack',
+    Desert = 'Desert',
+    Any = 'Any'
 }
 
-export enum RequirementsFormInputTypes{
+export enum RequirementsFormInputTypes {
     Text,
     List,
     Number,
