@@ -1,4 +1,5 @@
 import {DishDifficulty, MealType, RequirementsFormInputTypes, RequirementTypes} from "../../../enums.ts";
+import {SingleDishRequirements} from "../../../types.ts";
 
 export function getRequirementsFormState(type: RequirementTypes) {
     switch (type) {
@@ -16,7 +17,7 @@ const SingleDishRequirementsTasteStepInputs = [
         type: RequirementsFormInputTypes.List
     },
     {
-        label:"Cuisine",
+        label: "Cuisine",
         key: "cuisine",
         description: "What cuisine are you interested in?",
         type: RequirementsFormInputTypes.List
@@ -31,19 +32,19 @@ const SingleDishRequirementsPracticalStepInputs = [
         type: RequirementsFormInputTypes.Number
     },
     {
-        label:"Difficulty",
+        label: "Difficulty",
         key: "difficulty",
         description: "How difficult do you want to be?",
         type: RequirementsFormInputTypes.Select
     },
     {
-        label:"Servings",
+        label: "Servings",
         key: "servings",
         description: "How many servings do you want?",
         type: RequirementsFormInputTypes.Number
     },
     {
-        label:"Meal Type",
+        label: "Meal Type",
         key: "mealType",
         description: "What meal type do you need? (eg. lunch, dinner, etc.)",
         type: RequirementsFormInputTypes.Select
@@ -58,13 +59,13 @@ const SingleDishRequirementsDietaryStepInputs = [
         type: RequirementsFormInputTypes.Text
     },
     {
-        label:"Calories",
+        label: "Calories",
         key: "calories",
         description: "How many calories do you want?",
         type: RequirementsFormInputTypes.Number
     },
     {
-        label:"High Protein",
+        label: "High Protein",
         key: "highProtein",
         description: "Do you want it to be rich in protein?",
         type: RequirementsFormInputTypes.Boolean
@@ -76,7 +77,7 @@ const SingleDishRequirementsDietaryStepInputs = [
         type: RequirementsFormInputTypes.Boolean
     },
     {
-        label:"Low Carbs",
+        label: "Low Carbs",
         key: "lowCarbs",
         description: "Do you want it to be low carbs?",
         type: RequirementsFormInputTypes.Boolean
@@ -91,7 +92,7 @@ const SingleDishRequirementsBlacklistStepInputs = [
         type: RequirementsFormInputTypes.List
     },
     {
-        label:"Allergens",
+        label: "Allergens",
         key: "allergens",
         description: "What allergens do you want to avoid?",
         type: RequirementsFormInputTypes.List
@@ -105,15 +106,15 @@ export const SingleDishRequirementsStepsInputs = [
     SingleDishRequirementsBlacklistStepInputs
 ]
 
-export const SingleDishRequirementsState = {
+export const SingleDishRequirementsState: SingleDishRequirements = {
     ingredients: new Array<string>(),
     cuisine: new Array<string>(),
-    time: null,
+    time: undefined,
     difficulty: DishDifficulty.Casual,
     servings: 1,
     mealType: MealType.Any,
     dietType: "",
-    calories: null,
+    calories: undefined,
     highProtein: false,
     lowFat: false,
     lowCarbs: false,

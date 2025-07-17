@@ -4,7 +4,7 @@ export type SingleDishRequirements = SingleDishTasteRequirements & SingleDishPra
 
 export type SingleDishTasteRequirements = {
     ingredients?: string[],
-    cuisineType?:string,
+    cuisine?:string[],
 }
 
 export type SingleDishPracticalRequirements = {
@@ -23,6 +23,24 @@ export type SingleDishDietaryRequirements = {
 }
 
 export type SingleDishBlacklistRequirements = {
-    ingredientsBlacklist?: string[],
+    blacklistedIngredients?: string[],
     allergens?: string[],
+}
+
+export type SingleDishResultType = {
+    title: string;
+    description: string;
+    ingredients: Array<string>;
+    instructions: Array<string>;
+    estimatedTime: number;
+    servings: number;
+    totalWeight: number;
+    weightPerServing: number;
+    caloriesPer100g: number;
+    macrosPer100g: {
+        protein: number;
+        fat: number;
+        carbs: number;
+    },
+    difficulty: string;
 }

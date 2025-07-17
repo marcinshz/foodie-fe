@@ -8,19 +8,28 @@ import {useState} from "react";
 import {Step, StepLabel, Stepper} from "@mui/material";
 import {SingleDishRequirementsSteps} from "../../constants.ts";
 import {getRequirementsFormState} from "./RequirementsFormStep/formStepTemplates.ts";
+import {generateSingleDishDefault} from "../../DataService.ts";
+import {SingleDishResultType} from "../../types.ts";
 
 type RequirementsFormProps = {
-    type: RequirementTypes
+    type: RequirementTypes;
+    setResult: React.Dispatch<React.SetStateAction<SingleDishResultType | undefined>>
 }
 
-function RequirementsForm({type}: RequirementsFormProps) {
+function RequirementsForm({type, setResult}: RequirementsFormProps) {
     const [step, setStep] = useState(0);
     const [formState, setFormState] = useState(getRequirementsFormState(type));
-    const handleSubmit = () => {
-        console.log('submit', formState)
+
+    const handleSubmit = async () => {
+        // TODO: In the future I'll need to check if form state is for single or for a meal plan
+        // TODO: Add error handling
+        if (formState) {
+            const data = await generateSingleDishDefault(formState);
+            if(data) setResult(data);
+        }
     }
 
-    const handleChange = (key:string, value:string | number | boolean | string[] | DishDifficulty | MealType) => {
+    const handleChange = (key: string, value: string | number | boolean | string[] | DishDifficulty | MealType) => {
         setFormState((prevState) => {
             return {...prevState, [key]: value}
         })
@@ -31,7 +40,8 @@ function RequirementsForm({type}: RequirementsFormProps) {
             <div className="requirements-form__header">
                 <div className="requirements-form__header__text">
                     <h2>First of all, we need to ask you a few questions.</h2>
-                    <p>Please answer following questions to help us provide you with recipes tailored to your preferences. Answers are optional, but help us understand your taste and preferences.</p>
+                    <p>Please answer following questions to help us provide you with recipes tailored to your
+                        preferences. Answers are optional, but help us understand your taste and preferences.</p>
                 </div>
                 <div className="requirements-form__header__invite-to-inspiration">
                     <p>Wanna skip questions? Click on the plate and try our inspo feature!</p>
@@ -51,11 +61,12 @@ function RequirementsForm({type}: RequirementsFormProps) {
             </Stepper>
             <RequirementsFormStep type={type} step={step} formState={formState} handleChange={handleChange}/>
             <div className="requirements-form__navigation">
-                <Button variant="filled" color="primary" disabled={step === 0} onClick={() => setStep(step - 1)}>Back</Button>
+                <Button variant="text" color="primary" disabled={step === 0}
+                        onClick={() => setStep(step - 1)}>Back</Button>
                 {step !== 3 ?
-                    <Button variant="filled" color="primary" onClick={() => setStep(step + 1)}>Next</Button>
-                :
-                    <Button variant="filled" color="primary" onClick={handleSubmit}>Submit</Button>
+                    <Button variant="text" color="primary" onClick={() => setStep(step + 1)}>Next</Button>
+                    :
+                    <Button variant="text" color="primary" onClick={handleSubmit}>Submit</Button>
                 }
             </div>
         </div>

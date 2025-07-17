@@ -1,5 +1,8 @@
+import {SingleDishRequirements} from "./types.ts";
+
 const URL = "http://localhost:3000";
 
+//AUTH ENDPOINTS
 export async function login(email: string, password: string) {
     const res = await fetch(`${URL}/auth/sign-in`, {
         method: "POST",
@@ -31,6 +34,25 @@ export async function register(email: string, password: string) {
 
     if (!res.ok) {
         throw new Error(data.message || 'Registration failed');
+    }
+
+    return data;
+}
+
+//SINGLE DISH ENDPOINTS
+export async function generateSingleDishDefault(requirementsInput:SingleDishRequirements) {
+    const res = await fetch(`${URL}/openai/single-dish-default`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requirementsInput),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.message || 'Dish generation failed');
     }
 
     return data;
