@@ -26,12 +26,12 @@ function Navbar() {
                     </button>
                 </div>
                 {authData && <div className="navbar__container__menu">
-                    <div className="navbar__container__menu__links">
+{/*                    <div className="navbar__container__menu__links">
                         <a href="/" className="navbar__container__menu__links__item">Lorem</a>
                         <a href="/" className="navbar__container__menu__links__item">Ipsum</a>
                         <a href="/" className="navbar__container__menu__links__item">Lorem</a>
                         <a href="/" className="navbar__container__menu__links__item">Ipsum</a>
-                    </div>
+                    </div>*/}
                     <Button
                         variant="outlined"
                         onClick={removeAuthData}

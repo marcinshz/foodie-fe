@@ -15,7 +15,6 @@ function SingleDishResult({result}: SingleDishResultProps) {
     useEffect(() => {
         if (result || !image) {
             generateSingleDishImage(result).then((data) => {
-                console.log(data)
                 setImage(data.url);
             });
         }
