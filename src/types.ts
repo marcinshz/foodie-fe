@@ -29,15 +29,14 @@ export type SingleDishBlacklistRequirements = {
 
 export type SingleDishResultType = {
     title: string;
+    cuisine:string;
     description: string;
     ingredients: Array<string>;
     instructions: Array<string>;
     estimatedTime: number;
     servings: number;
-    totalWeight: number;
-    weightPerServing: number;
-    caloriesPer100g: number;
-    macrosPer100g: {
+    calories: number;
+    macros: {
         protein: number;
         fat: number;
         carbs: number;

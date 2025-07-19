@@ -1,59 +1,75 @@
 @keyframes plateRotation {
-  100% {transform: rotate(720deg);}
+  100% {
+    transform: rotate(720deg);
+  }
 }
 
-.requirements-form{
-  padding-top:4rem;
+.requirements-form {
+  padding-top: 4rem;
   display: flex;
   flex-direction: column;
   gap: 5rem;
 
-  &__header{
+  &__header {
     display: grid;
     grid-template-columns: 1fr 0.75fr;
     grid-gap: 3rem;
 
-    &__text{
+    &__text {
 
-      h2{
-        margin:0;
+      h2 {
+        margin: 0;
       }
 
-      p{
+      p {
         font-size: 1.15rem;
       }
     }
 
-    &__invite-to-inspiration{
+    &__invite-to-inspiration {
       display: flex;
       align-items: center;
-      gap:4rem;
+      gap: 4rem;
       border: 1px solid rgba(0, 0, 0, 0.75);
-      padding:1rem 1.5rem;
+      padding: 1rem 1.5rem;
       border-radius: 0.5rem;
       align-self: flex-start;
       justify-content: space-between;
 
-      p{
-        margin:0;
+      p {
+        margin: 0;
         font-size: 1.1rem;
         font-weight: 500;
       }
 
-      &__plate{
+      &__plate {
 
-        &:hover{
+        &:hover {
           animation: plateRotation 1s infinite;
         }
       }
     }
   }
 
-  &__navigation{
+  &__navigation {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  &:has(.requirements-form__loading) {
+    align-items: center;
+  }
+
+  &__loading {
+    width: 500px;
+    margin-top: 2rem;
+    overflow: hidden;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 
@@ -65,13 +81,13 @@
       grid-template-columns: initial;
       grid-gap: 2rem;
 
-      &__text{
-        order:2;
+      &__text {
+        order: 2;
       }
 
-      &__invite-to-inspiration{
+      &__invite-to-inspiration {
         align-items: center;
-        gap:2rem;
+        gap: 2rem;
       }
     }
   }
