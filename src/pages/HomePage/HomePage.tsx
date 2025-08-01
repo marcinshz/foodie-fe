@@ -31,7 +31,7 @@ function HomePage() {
                 <div className="home-page__features__grid">
                     <FeatureCard header="Single dish" paragraph="Find the perfect recipe for any occasion! Explore a variety of dishes with clear instructions to suit your cravings." path="/home/single-dish" icon="restaurant"/>
                     <FeatureCard header="Meal plan" paragraph="Take the stress out of planning meals! Build weekly or monthly menus and get organized in no time." path="/home/meal-plan" icon="calendar_month"/>
-                    <FeatureCard header="Random inspiration" paragraph="Stuck on what to cook? Let us surprise you! Discover a new recipe and spice up your culinary routine with exciting ideas." path="/home/inspiration" icon="lightbulb"/>
+                    <FeatureCard header="Cookbook" paragraph="Browse all your saved recipes, meal plans and shopping lists in one place!" path="/home/cookbook" icon="menu_book"/>
                 </div>
             </div>
         </div>
