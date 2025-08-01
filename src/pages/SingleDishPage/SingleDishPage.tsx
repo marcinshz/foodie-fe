@@ -1,21 +1,28 @@
 import './SingleDishPage.scss'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import RequirementsForm from "../../components/RequirementsForm/RequirementsForm.tsx";
 import {RequirementTypes} from "../../enums.ts";
+import {SingleDishResultType} from "../../types.ts";
+import SingleDishResult from "./SingleDishResult/SingleDishResult.tsx";
 
 enum SingleDishPageSteps {
     Requirements = 0,
     Result = 1,
-    Summary = 2
 }
 
 function SingleDishPage() {
     const [step, setStep] = useState<SingleDishPageSteps>(SingleDishPageSteps.Requirements);
-    const [requirements, setRequirements] = useState();
+    const [result, setResult] = useState<SingleDishResultType | undefined>();
+
+    useEffect(() => {
+        if (result) setStep(SingleDishPageSteps.Result);
+    }, [result]);
 
     return (
         <div className="single-dish-page container">
-            {step === 0 && <RequirementsForm type={RequirementTypes.SingleDish}/>}
+            {step === SingleDishPageSteps.Requirements && <RequirementsForm type={RequirementTypes.SingleDish}
+                                                                            setResult={setResult}/>}
+            {step === SingleDishPageSteps.Result && result && <SingleDishResult result={result}/>}
         </div>
     );
 }
