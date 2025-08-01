@@ -39,6 +39,10 @@
         margin-top: 1rem;
         margin-bottom: 0;
       }
+
+      &:last-of-type{
+        text-align: center;
+      }
     }
 
   }
@@ -132,6 +136,52 @@
       p{
         margin: 0;
         font-size: 1.125rem;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .single-dish-result {
+    &__basic-info-bar {
+      gap:3rem;
+    }
+
+    &__lists{
+      display: flex;
+      flex-direction: column;
+
+      .single-dish-result__instruction{
+        order:2;
+      }
+
+      .single-dish-result__ingredients{
+        width: 100%;
+
+        &__list{
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap:1rem;
+        }
+
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .single-dish-result{
+    &__basic-info-bar {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    &__data-bar{
+      flex-direction: column;
+      gap:2rem;
+
+      &__specification{
+        width: 100%;
       }
     }
   }

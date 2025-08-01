@@ -2,8 +2,12 @@ import './SingleDishResult.scss'
 import {SingleDishResultType} from "../../../types.ts";
 import {PieChart} from '@mui/x-charts/PieChart';
 import {useEffect, useState} from "react";
-import {generateSingleDishImage} from "../../../DataService.ts";
+import {generateSingleDishImage, saveSingleDish} from "../../../DataService.ts";
 import Skeleton from '@mui/material/Skeleton';
+import IconButton from '@mui/material/IconButton';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/Favorite';
+import {useAppStore} from "../../../store.ts";
 
 type SingleDishResultProps = {
     result: SingleDishResultType;
@@ -11,14 +15,23 @@ type SingleDishResultProps = {
 
 function SingleDishResult({result}: SingleDishResultProps) {
     const [image, setImage] = useState("");
+    const [saved, setSaved] = useState(false);
+    const authData = useAppStore((state) => state.authData);
 
     useEffect(() => {
         if (result || !image) {
-            generateSingleDishImage(result).then((data) => {
+/*            generateSingleDishImage(result).then((data) => {
                 setImage(data.url);
-            });
+            });*/
         }
     }, [result]);
+
+    async function handleSave() {
+        if (authData) {
+            await saveSingleDish({...result, userId: authData.user.id});
+            setSaved(!saved);
+        }
+    }
 
     return (
         <div className="single-dish-result">
@@ -44,6 +57,12 @@ function SingleDishResult({result}: SingleDishResultProps) {
                 <div className="single-dish-result__basic-info-bar__item">
                     <h4>Difficulty</h4>
                     <h3>{result.difficulty}</h3>
+                </div>
+                <div className="single-dish-result__basic-info-bar__item">
+                    <h4>Save recipe</h4>
+                    <IconButton color="primary" size="large" sx={{marginTop: '4px'}} onClick={handleSave}>
+                        {saved ? <FavoriteIcon/> : <FavoriteBorderIcon/>}
+                    </IconButton>
                 </div>
             </div>
             <div className="single-dish-result__data-bar">

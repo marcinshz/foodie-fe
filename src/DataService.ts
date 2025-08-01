@@ -71,3 +71,17 @@ export async function generateSingleDishImage(dishData: SingleDishResultType) {
         return data
     });
 }
+
+export async function saveSingleDish(dishData: SingleDishResultType & { userId: string }) {
+    return fetch(`${URL}/recipe`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dishData),
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}

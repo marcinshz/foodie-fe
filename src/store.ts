@@ -2,8 +2,10 @@ import {create} from 'zustand';
 import {persist} from 'zustand/middleware';
 
 export interface AuthData {
-    email: string;
-    id: string;
+    user: {
+        username: string;
+        id: string;
+    }
     token: string;
 }
 
