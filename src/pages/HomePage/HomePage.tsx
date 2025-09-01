@@ -4,8 +4,6 @@ import homehero3 from "../../assets/img/homehero3.jpg";
 import './HomePage.scss'
 import FeatureCard from "./FeatureCard/FeatureCard.tsx";
 function HomePage() {
-    let name = "Claude";
-
     return (
         <div className="home-page container">
             <div className="home-page__hero">
@@ -22,7 +20,7 @@ function HomePage() {
                 </div>
                 <div className="home-page__hero__content">
                     <h1 className="home-page__hero__content__header">Hungry?</h1>
-                    <p className="home-page__hero__content__paragraph">Hey {name}! Welcome to your go-to for healthy, delicious meals tailored just for you. Our app simplifies eating well with personalized dish recommendations to suit your tastes and lifestyle. Enjoy balanced meals effortlessly and start your journey to healthier, happier eating today!</p>
+                    <p className="home-page__hero__content__paragraph">Hey! Welcome to your go-to for healthy, delicious meals tailored just for you. Our app simplifies eating well with personalized dish recommendations to suit your tastes and lifestyle. Enjoy balanced meals effortlessly and start your journey to healthier, happier eating today!</p>
                 </div>
             </div>
 
