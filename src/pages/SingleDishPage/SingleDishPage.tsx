@@ -4,6 +4,7 @@ import RequirementsForm from "../../components/RequirementsForm/RequirementsForm
 import {RequirementTypes} from "../../enums.ts";
 import {SingleDishResultType} from "../../types.ts";
 import SingleDishResult from "./SingleDishResult/SingleDishResult.tsx";
+import {useLoaderData} from "react-router-dom";
 
 enum SingleDishPageSteps {
     Requirements = 0,
@@ -11,8 +12,9 @@ enum SingleDishPageSteps {
 }
 
 function SingleDishPage() {
+    const existingRecipe = useLoaderData();
     const [step, setStep] = useState<SingleDishPageSteps>(SingleDishPageSteps.Requirements);
-    const [result, setResult] = useState<SingleDishResultType | undefined>();
+    const [result, setResult] = useState<SingleDishResultType | undefined>(existingRecipe as SingleDishResultType | undefined);
 
     useEffect(() => {
         if (result) setStep(SingleDishPageSteps.Result);

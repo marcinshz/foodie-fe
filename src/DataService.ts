@@ -85,3 +85,42 @@ export async function saveSingleDish(dishData: SingleDishResultType & { userId: 
         return data
     });
 }
+
+export async function getUserRecipes(userId: string): Promise<(SingleDishResultType & { id: string })[]> {
+    return fetch(`${URL}/recipe/by-user/${userId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function getRecipeById(recipeId: string): Promise<SingleDishResultType & { id: string }> {
+    return fetch(`${URL}/recipe/${recipeId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function deleteRecipe(recipeId: string) {
+    return fetch(`${URL}/recipe/${recipeId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}

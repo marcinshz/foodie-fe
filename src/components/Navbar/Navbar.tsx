@@ -8,11 +8,11 @@ import Logo from '../iconComponents/logo.tsx';
 import {useAppStore} from "../../store.ts";
 
 function Navbar() {
-    const [menuOpen, setMenuOpen] = useState(false);
+    //const [menuOpen, setMenuOpen] = useState(false);
     const {authData, removeAuthData} = useAppStore((state) => state);
 
     return (
-        <div className={clsx("navbar", menuOpen && "navbar--open")}>
+        <div className={clsx("navbar"/*, menuOpen && "navbar--open"*/)}>
             <div className="navbar__container container">
                 <div>
                     <a href="/" className="navbar__container__identity">
@@ -20,10 +20,10 @@ function Navbar() {
                         <Logo/>
                         <div className="navbar__container__identity__name">Foodie</div>
                     </a>
-                    <button className="navbar__container__toggle" onClick={() => setMenuOpen(!menuOpen)}>
+{/*                    <button className="navbar__container__toggle" onClick={() => setMenuOpen(!menuOpen)}>
                         {menuOpen ? <CloseIcon sx={{width: "32px", height: "32px"}}/> :
                             <MenuIcon sx={{width: "32px", height: "32px"}}/>}
-                    </button>
+                    </button>*/}
                 </div>
                 {authData && <div className="navbar__container__menu">
 {/*                    <div className="navbar__container__menu__links">

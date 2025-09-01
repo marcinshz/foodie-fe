@@ -1,0 +1,13 @@
+.cookbook-page{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 2rem;
+
+  &__tabs{
+    width: 100%;
+    display: flex;
+    border-bottom: 1px solid #d7e3fc;
+    justify-content: center;
+  }
+}
