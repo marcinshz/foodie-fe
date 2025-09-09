@@ -17,6 +17,7 @@ function RequirementsFormStep({type, step, formState, handleChange}: Requirement
                 <>
                     {SingleDishRequirementsStepsInputs[step].map(({label, key, description, type}) => (
                         <InputWrapper
+                            key={key}
                             label={label}
                             stateKey={key}
                             description={description}
@@ -31,6 +32,7 @@ function RequirementsFormStep({type, step, formState, handleChange}: Requirement
                 <>
                     {MealPlanRequirementsStepsInputs[step].map(({label, key, description, type}) => (
                         <InputWrapper
+                            key={key}
                             label={label}
                             stateKey={key}
                             description={description}

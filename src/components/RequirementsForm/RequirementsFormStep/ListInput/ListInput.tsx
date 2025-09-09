@@ -42,7 +42,7 @@ function ListInput({label, stateKey, description, handleChange, values}: ListInp
             </div>
             <div className="list-input__list">
                 {values && values.map((value, index) => (
-                    <Chip label={value} onDelete={() => handleDelete(index)} />
+                    <Chip key={index} label={value} onDelete={() => handleDelete(index)} />
                 ))}
             </div>
         </div>

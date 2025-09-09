@@ -90,6 +90,7 @@ function SingleDishResult({result}: SingleDishResultProps) {
             <div className="single-dish-result__lists">
                 <div className="single-dish-result__instruction">
                     {result.instructions.map((instruction: string, index: number) => <div
+                        key={index}
                         className="single-dish-result__instruction__item">
                         <h1 className="single-dish-result__instruction__item__number">{index + 1}</h1>
                         <p className="single-dish-result__instruction__item__text">{instruction}</p>
@@ -98,7 +99,8 @@ function SingleDishResult({result}: SingleDishResultProps) {
                 <div className="single-dish-result__ingredients">
                     <h2>Ingredients</h2>
                     <div className="single-dish-result__ingredients__list">
-                        {result.ingredients.map((ingredient: string) => <p
+                        {result.ingredients.map((ingredient: string, index: number) => <p
+                            key={index}
                             className="single-dish-result__ingredients__item">{ingredient}</p>)}
                     </div>
                 </div>
