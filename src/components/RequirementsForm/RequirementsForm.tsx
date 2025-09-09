@@ -14,10 +14,11 @@ import {generateMealPlan, generateSingleDishDefault} from "../../DataService.ts"
 
 type RequirementsFormProps = {
     type: RequirementTypes;
-    setResult: React.Dispatch<React.SetStateAction<SingleDishResultType | undefined>> | React.Dispatch<React.SetStateAction<MealPlanResultType | undefined>>
+    setSingleDishResult?: React.Dispatch<React.SetStateAction<SingleDishResultType | undefined>>;
+    setMealPlanResult?: React.Dispatch<React.SetStateAction<MealPlanResultType | undefined>>;
 }
 
-function RequirementsForm({type, setResult}: RequirementsFormProps) {
+function RequirementsForm({type, setSingleDishResult, setMealPlanResult}: RequirementsFormProps) {
     const [step, setStep] = useState(0);
     const [formState, setFormState] = useState(getRequirementsFormState(type));
     const [loading, setLoading] = useState(false);
@@ -30,17 +31,16 @@ function RequirementsForm({type, setResult}: RequirementsFormProps) {
             switch (type) {
                 case RequirementTypes.SingleDish:
                     const singleDishData = await generateSingleDishDefault(formState);
-                    if (singleDishData) {
+                    if (singleDishData && setSingleDishResult) {
                         setLoading(false);
-                        setResult(singleDishData);
+                        setSingleDishResult(singleDishData);
                     }
                     break;
                 case RequirementTypes.MealPlan:
                     const mealPlanData = await generateMealPlan(formState);
-                    console.log({mealPlanData})
-                    if (mealPlanData) {
+                    if (mealPlanData && setMealPlanResult) {
                         setLoading(false);
-                        setResult(mealPlanData);
+                        setMealPlanResult(mealPlanData);
                     }
                     break;
             }

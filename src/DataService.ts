@@ -125,7 +125,7 @@ export async function deleteRecipe(recipeId: string) {
     });
 }
 
-export async function generateMealPlan(requirementsInput: MealPlanRequirements){
+export async function generateMealPlan(requirementsInput: MealPlanRequirements): Promise<MealPlanResultType> {
     const res = await fetch(`${URL}/openai/meal-plan-default`, {
         method: "POST",
         headers: {

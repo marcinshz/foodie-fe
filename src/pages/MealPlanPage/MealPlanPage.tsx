@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import RequirementsForm from "../../components/RequirementsForm/RequirementsForm.tsx";
 import {RequirementTypes} from "../../enums.ts";
 import {MealPlanResultType} from "../../types.ts";
+import MealPlanResult from "./MealPlanResult/MealPlanResult.tsx";
 
 enum MealPlanPageSteps {
     Requirements = 0,
@@ -21,8 +22,8 @@ function MealPlanPage() {
     return (
         <div className="meal-plan-page container">
             {step === MealPlanPageSteps.Requirements && <RequirementsForm type={RequirementTypes.MealPlan}
-                                                                          setResult={setResult}/>}
-            {step === MealPlanPageSteps.Result && result && <></>}
+                                                                          setMealPlanResult={setResult}/>}
+            {step === MealPlanPageSteps.Result && result && <MealPlanResult result={result}/>}
         </div>
     );
 }
