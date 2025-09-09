@@ -1,4 +1,4 @@
-import {SingleDishRequirements, SingleDishResultType} from "./types.ts";
+import {SingleDishRequirements, SingleDishResultType, MealPlanRequirements, MealPlanResultType} from "./types.ts";
 
 const URL = "http://localhost:3000";
 
@@ -125,7 +125,22 @@ export async function deleteRecipe(recipeId: string) {
     });
 }
 
-export async function generateMealPlan() {
+export async function generateMealPlan(requirementsInput: MealPlanRequirements){
+    const res = await fetch(`${URL}/openai/meal-plan-default`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requirementsInput),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.message || 'Meal plan generation failed');
+    }
+
+    return data;
 }
 
 export async function saveMealPlan() {

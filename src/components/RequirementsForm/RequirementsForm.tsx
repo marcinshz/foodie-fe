@@ -10,7 +10,7 @@ import {MealPlanRequirementsSteps, SingleDishRequirementsSteps} from "../../cons
 import {getRequirementsFormState} from "./RequirementsFormStep/formStepTemplates.ts";
 import {MealPlanResultType, SingleDishResultType} from "../../types.ts";
 import {DotLottieReact} from '@lottiefiles/dotlottie-react';
-import {generateSingleDishDefault} from "../../DataService.ts";
+import {generateMealPlan, generateSingleDishDefault} from "../../DataService.ts";
 
 type RequirementsFormProps = {
     type: RequirementTypes;
@@ -29,14 +29,19 @@ function RequirementsForm({type, setResult}: RequirementsFormProps) {
 
             switch (type) {
                 case RequirementTypes.SingleDish:
-                    const data = await generateSingleDishDefault(formState);
-                    if (data) {
+                    const singleDishData = await generateSingleDishDefault(formState);
+                    if (singleDishData) {
                         setLoading(false);
-                        setResult(data);
+                        setResult(singleDishData);
                     }
                     break;
                 case RequirementTypes.MealPlan:
-                    console.log(formState);
+                    const mealPlanData = await generateMealPlan(formState);
+                    console.log({mealPlanData})
+                    if (mealPlanData) {
+                        setLoading(false);
+                        setResult(mealPlanData);
+                    }
                     break;
             }
         }
