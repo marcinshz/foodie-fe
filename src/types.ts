@@ -1,25 +1,31 @@
-import {DishDifficulty} from "./enums.ts";
+import {DishDifficulty, MealType} from "./enums.ts";
 
-export type SingleDishRequirements = SingleDishTasteRequirements & SingleDishPracticalRequirements & SingleDishDietaryRequirements & SingleDishBlacklistRequirements
+
+//Single Dish
+export type SingleDishRequirements =
+    SingleDishTasteRequirements
+    & SingleDishPracticalRequirements
+    & SingleDishDietaryRequirements
+    & SingleDishBlacklistRequirements
 
 export type SingleDishTasteRequirements = {
     ingredients?: string[],
-    cuisine?:string[],
+    cuisine?: string[],
 }
 
 export type SingleDishPracticalRequirements = {
     time?: number,
-    difficulty?:DishDifficulty,
-    servings?:number,
-    mealType?:string,
+    difficulty?: DishDifficulty,
+    servings?: number,
+    mealType?: string,
 }
 
 export type SingleDishDietaryRequirements = {
-    dietType?:string,
-    calories?:number,
-    highProtein?:boolean,
-    lowFat?:boolean,
-    lowCarbs?:boolean,
+    dietType?: string,
+    calories?: number,
+    highProtein?: boolean,
+    lowFat?: boolean,
+    lowCarbs?: boolean,
 }
 
 export type SingleDishBlacklistRequirements = {
@@ -29,7 +35,7 @@ export type SingleDishBlacklistRequirements = {
 
 export type SingleDishResultType = {
     title: string;
-    cuisine:string;
+    cuisine: string;
     description: string;
     ingredients: Array<string>;
     instructions: Array<string>;
@@ -42,4 +48,70 @@ export type SingleDishResultType = {
         carbs: number;
     },
     difficulty: string;
+}
+
+//Meal Plan
+export type MealPlanRequirements =
+    MealPlanStructureRequirements &
+    MealPlanTasteRequirements &
+    MealPlanPracticalRequirements &
+    MealPlanDietaryRequirements &
+    MealPlanBlacklistRequirements
+
+export type MealPlanStructureRequirements = {
+    days?: number,
+    mealsPerDay?: number,
+    mealTypes?: string[],
+}
+
+export type MealPlanTasteRequirements = {
+    ingredients?: string[],
+    cuisine?: string[],
+}
+
+export type MealPlanPracticalRequirements = {
+    timePerDay?: number,
+    difficulty?: DishDifficulty,
+    servings?: number,
+}
+
+export type MealPlanDietaryRequirements = {
+    dietType?: string,
+    caloriesPerDay?: number,
+    highProtein?: boolean,
+    lowFat?: boolean,
+    lowCarbs?: boolean,
+}
+
+export type MealPlanBlacklistRequirements = {
+    blacklistedIngredients?: string[],
+    allergens?: string[],
+}
+
+export type MealPlanResultType = {
+    title: string;
+    description: string;
+    days: number;
+    mealsPerDay: number;
+    servings: number;
+    dailyTargets?: {
+        calories?: number;
+        protein?: number;
+        fat?: number;
+        carbs?: number;
+    };
+    plan: Array<{
+        day: number;
+        estimatedTime: number;
+        totals: {
+            calories: number;
+            protein: number;
+            fat: number;
+            carbs: number;
+        };
+        meals: Array<{
+            type: MealType;
+            dish: SingleDishResultType;
+        }>;
+    }>;
 }

@@ -124,3 +124,18 @@ export async function deleteRecipe(recipeId: string) {
         return data
     });
 }
+
+export async function generateMealPlan() {
+}
+
+export async function saveMealPlan() {
+}
+
+export async function getUserMealPlans() {
+}
+
+export async function getMealPlanById(mealPlanId: string) {
+}
+
+export async function deleteMealPlan() {
+}

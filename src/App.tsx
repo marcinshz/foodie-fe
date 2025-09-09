@@ -6,7 +6,8 @@ import AuthorizedLayout from "./layouts/AuthorizedLayout.tsx";
 import Navbar from "./components/Navbar/Navbar.tsx";
 import SingleDishPage from "./pages/SingleDishPage/SingleDishPage.tsx";
 import CookBookPage from "./pages/CookBookPage/CookBookPage.tsx";
-import {getRecipeById} from "./DataService.ts";
+import {getMealPlanById, getRecipeById} from "./DataService.ts";
+import MealPlanPage from "./pages/MealPlanPage/MealPlanPage.tsx";
 
 function App() {
 
@@ -27,6 +28,18 @@ function App() {
                             path: '/home/single-dish/:id', element: <SingleDishPage/>, loader: async ({params}) => {
                                 if (params.id) {
                                     return await getRecipeById(params.id);
+                                }
+                            }
+                        },
+                    ]
+                },
+                {
+                    path: '/home/meal-plan', children: [
+                        {path: '/home/meal-plan', element: <MealPlanPage/>},
+                        {
+                            path: '/home/meal-plan/:id', element: <MealPlanPage/>, loader: async ({params}) => {
+                                if (params.id) {
+                                    return await getMealPlanById(params.id);
                                 }
                             }
                         },

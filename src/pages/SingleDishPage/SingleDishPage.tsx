@@ -1,4 +1,3 @@
-import './SingleDishPage.scss'
 import {useEffect, useState} from 'react'
 import RequirementsForm from "../../components/RequirementsForm/RequirementsForm.tsx";
 import {RequirementTypes} from "../../enums.ts";

@@ -4,17 +4,17 @@ import {Link} from "react-router-dom";
 import Plate from "../iconComponents/plate.tsx";
 import RequirementsFormStep from "./RequirementsFormStep/RequirementsFormStep.tsx";
 import Button from "@mui/material/Button";
-import {useState} from "react";
+import React, {useState} from "react";
 import {Step, StepLabel, Stepper} from "@mui/material";
-import {SingleDishRequirementsSteps} from "../../constants.ts";
+import {MealPlanRequirementsSteps, SingleDishRequirementsSteps} from "../../constants.ts";
 import {getRequirementsFormState} from "./RequirementsFormStep/formStepTemplates.ts";
-import {SingleDishResultType} from "../../types.ts";
+import {MealPlanResultType, SingleDishResultType} from "../../types.ts";
 import {DotLottieReact} from '@lottiefiles/dotlottie-react';
 import {generateSingleDishDefault} from "../../DataService.ts";
 
 type RequirementsFormProps = {
     type: RequirementTypes;
-    setResult: React.Dispatch<React.SetStateAction<SingleDishResultType | undefined>>
+    setResult: React.Dispatch<React.SetStateAction<SingleDishResultType | undefined>> | React.Dispatch<React.SetStateAction<MealPlanResultType | undefined>>
 }
 
 function RequirementsForm({type, setResult}: RequirementsFormProps) {
@@ -23,14 +23,21 @@ function RequirementsForm({type, setResult}: RequirementsFormProps) {
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async () => {
-        // TODO: In the future I'll need to check if form state is for single or for a meal plan
         // TODO: Add error handling
         if (formState) {
             setLoading(true);
-            const data = await generateSingleDishDefault(formState);
-            if (data) {
-                setLoading(false);
-                setResult(data);
+
+            switch (type) {
+                case RequirementTypes.SingleDish:
+                    const data = await generateSingleDishDefault(formState);
+                    if (data) {
+                        setLoading(false);
+                        setResult(data);
+                    }
+                    break;
+                case RequirementTypes.MealPlan:
+                    console.log(formState);
+                    break;
             }
         }
     }
@@ -69,7 +76,12 @@ function RequirementsForm({type, setResult}: RequirementsFormProps) {
                         </div>
                     </div>
                     <Stepper activeStep={step} alternativeLabel>
-                        {SingleDishRequirementsSteps.map((label) => (
+                        {type === RequirementTypes.SingleDish && SingleDishRequirementsSteps.map((label) => (
+                            <Step key={label} sx={{'.Mui-active, .Mui-completed': {color: '#757bc8'}}}>
+                                <StepLabel>{label}</StepLabel>
+                            </Step>
+                        ))}
+                        {type === RequirementTypes.MealPlan && MealPlanRequirementsSteps.map((label) => (
                             <Step key={label} sx={{'.Mui-active, .Mui-completed': {color: '#757bc8'}}}>
                                 <StepLabel>{label}</StepLabel>
                             </Step>
@@ -79,10 +91,15 @@ function RequirementsForm({type, setResult}: RequirementsFormProps) {
                     <div className="requirements-form__navigation">
                         <Button variant="text" color="primary" disabled={step === 0}
                                 onClick={() => setStep(step - 1)}>Back</Button>
-                        {step !== 3 ?
-                            <Button variant="text" color="primary" onClick={() => setStep(step + 1)}>Next</Button>
+                        {type === RequirementTypes.SingleDish ? step !== 3 ?
+                                <Button variant="text" color="primary" onClick={() => setStep(step + 1)}>Next</Button>
+                                :
+                                <Button variant="text" color="primary" onClick={handleSubmit}>Submit</Button>
                             :
-                            <Button variant="text" color="primary" onClick={handleSubmit}>Submit</Button>
+                            step !== 4 ?
+                                <Button variant="text" color="primary" onClick={() => setStep(step + 1)}>Next</Button>
+                                :
+                                <Button variant="text" color="primary" onClick={handleSubmit}>Submit</Button>
                         }
                     </div>
                 </>
