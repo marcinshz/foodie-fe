@@ -196,6 +196,24 @@ export async function deleteMealPlan(mealPlanId: string) {
     });
 }
 
+export async function updateMealPlan(mealPlanId: string, mealPlanData: MealPlanResultType): Promise<MealPlanResultType & { id: string }> {
+    const res = await fetch(`${URL}/meal-plan/${mealPlanId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mealPlanData),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.message || 'Meal plan update failed');
+    }
+
+    return data;
+}
+
 export async function replaceDish(replaceRequest: {
     mealType: string;
     targetCalories?: number;

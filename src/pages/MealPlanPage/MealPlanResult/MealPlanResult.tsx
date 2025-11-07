@@ -9,7 +9,7 @@ import {Modal, Box, Button, CircularProgress, Skeleton} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
-import {saveMealPlan, replaceDish} from "../../../DataService.ts";
+import {saveMealPlan, replaceDish, updateMealPlan} from "../../../DataService.ts";
 
 type MealPlanResultProps = {
     result: MealPlanResultType & { id?: string };
@@ -146,14 +146,15 @@ function MealPlanResult({result: initialResult}: MealPlanResultProps) {
         }
     };
 
-    const handleAcceptReplacement = () => {
+    const handleAcceptReplacement = async () => {
         if (!replacementPreview || !replacementPreview.newDish) return;
 
         const { newDish, dayNumber, mealIndex } = replacementPreview;
 
         // Update the meal plan with the new dish
-        setResult(prevResult => {
-            const newPlan = prevResult.plan.map(day => {
+        const updatedResult = {
+            ...result,
+            plan: result.plan.map(day => {
                 if (day.day !== dayNumber) return day;
 
                 const newMeals = day.meals.map((m, idx) => {
@@ -181,13 +182,21 @@ function MealPlanResult({result: initialResult}: MealPlanResultProps) {
                     totals: newTotals,
                     estimatedTime: newEstimatedTime,
                 };
-            });
+            })
+        };
 
-            return {
-                ...prevResult,
-                plan: newPlan
-            };
-        });
+        // Update local state
+        setResult(updatedResult);
+
+        // If meal plan is saved (has ID), update in database
+        if (result.id) {
+            try {
+                await updateMealPlan(result.id, updatedResult);
+            } catch (error) {
+                console.error('Failed to update meal plan in database:', error);
+                alert('Dish replaced locally, but failed to save to database. Please try saving again.');
+            }
+        }
 
         // Close modal
         setReplacementPreview(null);
