@@ -195,3 +195,38 @@ export async function deleteMealPlan(mealPlanId: string) {
         return data
     });
 }
+
+export async function replaceDish(replaceRequest: {
+    mealType: string;
+    targetCalories?: number;
+    targetProtein?: number;
+    targetFat?: number;
+    targetCarbs?: number;
+    servings: number;
+    cuisine?: string[];
+    maxTime?: number;
+    difficulty?: string;
+    dietType?: string;
+    highProtein?: boolean;
+    lowFat?: boolean;
+    lowCarbs?: boolean;
+    blacklistedIngredients?: string[];
+    allergens?: string[];
+    currentDishTitle?: string;
+}): Promise<SingleDishResultType> {
+    const res = await fetch(`${URL}/openai/replace-dish`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(replaceRequest),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.message || 'Dish replacement failed');
+    }
+
+    return data;
+}

@@ -5,10 +5,11 @@ import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import {useAppStore} from "../../../store.ts";
-import {Modal, Box} from '@mui/material';
+import {Modal, Box, Button, CircularProgress, Skeleton} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
-import {saveMealPlan} from "../../../DataService.ts";
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import {saveMealPlan, replaceDish} from "../../../DataService.ts";
 
 type MealPlanResultProps = {
     result: MealPlanResultType & { id?: string };
@@ -25,10 +26,21 @@ type SelectedDish = {
     dayNumber: number;
 } | null;
 
-function MealPlanResult({result}: MealPlanResultProps) {
-    const [saved, setSaved] = useState(!!result.id); // If result has ID, it's already saved
+type ReplacementPreview = {
+    oldDish: SingleDishResultType;
+    newDish: SingleDishResultType | null; // null when loading
+    mealType: string;
+    dayNumber: number;
+    mealIndex: number;
+    loading: boolean;
+} | null;
+
+function MealPlanResult({result: initialResult}: MealPlanResultProps) {
+    const [result, setResult] = useState(initialResult);
+    const [saved, setSaved] = useState(!!initialResult.id); // If result has ID, it's already saved
     const [hoveredDay, setHoveredDay] = useState<HoveredDay>(null);
     const [selectedDish, setSelectedDish] = useState<SelectedDish>(null);
+    const [replacementPreview, setReplacementPreview] = useState<ReplacementPreview>(null);
     const popupRef = useRef<HTMLDivElement>(null);
     const hoverTimeoutRef = useRef<number | null>(null);
     const authData = useAppStore((state) => state.authData);
@@ -87,6 +99,141 @@ function MealPlanResult({result}: MealPlanResultProps) {
 
     const getDayData = (dayNumber: number) => {
         return result.plan.find(day => day.day === dayNumber);
+    };
+
+    const handleReplaceDish = async (dayNumber: number, mealIndex: number) => {
+        const dayData = getDayData(dayNumber);
+        if (!dayData) return;
+
+        const meal = dayData.meals[mealIndex];
+        if (!meal) return;
+
+        // Immediately show modal with loading state
+        setReplacementPreview({
+            oldDish: meal.dish,
+            newDish: null, // null indicates loading
+            mealType: meal.type,
+            dayNumber: dayNumber,
+            mealIndex: mealIndex,
+            loading: true
+        });
+
+        try {
+            // Call API to get replacement dish
+            const newDish = await replaceDish({
+                mealType: meal.type,
+                targetCalories: meal.dish.calories,
+                targetProtein: meal.dish.macros.protein,
+                targetFat: meal.dish.macros.fat,
+                targetCarbs: meal.dish.macros.carbs,
+                servings: result.servings,
+                currentDishTitle: meal.dish.title,
+                // Include any meal plan preferences if available
+                difficulty: result.plan[0]?.meals[0]?.dish?.difficulty,
+            });
+
+            // Update modal with new dish
+            setReplacementPreview(prev => prev ? {
+                ...prev,
+                newDish: newDish,
+                loading: false
+            } : null);
+
+        } catch (error) {
+            console.error('Failed to replace dish:', error);
+            alert('Failed to replace dish. Please try again.');
+            setReplacementPreview(null); // Close modal on error
+        }
+    };
+
+    const handleAcceptReplacement = () => {
+        if (!replacementPreview || !replacementPreview.newDish) return;
+
+        const { newDish, dayNumber, mealIndex } = replacementPreview;
+
+        // Update the meal plan with the new dish
+        setResult(prevResult => {
+            const newPlan = prevResult.plan.map(day => {
+                if (day.day !== dayNumber) return day;
+
+                const newMeals = day.meals.map((m, idx) => {
+                    if (idx !== mealIndex) return m;
+                    return {
+                        ...m,
+                        dish: newDish
+                    };
+                });
+
+                // Recalculate day totals
+                const newTotals = newMeals.reduce((acc, m) => ({
+                    calories: acc.calories + m.dish.calories,
+                    protein: acc.protein + m.dish.macros.protein,
+                    fat: acc.fat + m.dish.macros.fat,
+                    carbs: acc.carbs + m.dish.macros.carbs,
+                }), { calories: 0, protein: 0, fat: 0, carbs: 0 });
+
+                // Recalculate estimated time
+                const newEstimatedTime = newMeals.reduce((acc, m) => acc + m.dish.estimatedTime, 0);
+
+                return {
+                    ...day,
+                    meals: newMeals,
+                    totals: newTotals,
+                    estimatedTime: newEstimatedTime,
+                };
+            });
+
+            return {
+                ...prevResult,
+                plan: newPlan
+            };
+        });
+
+        // Close modal
+        setReplacementPreview(null);
+    };
+
+    const handleCancelReplacement = () => {
+        setReplacementPreview(null);
+    };
+
+    const handleTryAgain = async () => {
+        if (!replacementPreview) return;
+
+        const { oldDish, mealType } = replacementPreview;
+
+        // Set loading state
+        setReplacementPreview(prev => prev ? {
+            ...prev,
+            newDish: null,
+            loading: true
+        } : null);
+
+        try {
+            // Call API to get replacement dish
+            const newDish = await replaceDish({
+                mealType: mealType,
+                targetCalories: oldDish.calories,
+                targetProtein: oldDish.macros.protein,
+                targetFat: oldDish.macros.fat,
+                targetCarbs: oldDish.macros.carbs,
+                servings: result.servings,
+                currentDishTitle: oldDish.title,
+                difficulty: result.plan[0]?.meals[0]?.dish?.difficulty,
+            });
+
+            // Update modal with new dish
+            setReplacementPreview(prev => prev ? {
+                ...prev,
+                newDish: newDish,
+                loading: false
+            } : null);
+
+        } catch (error) {
+            console.error('Failed to replace dish:', error);
+            alert('Failed to replace dish. Please try again.');
+            setReplacementPreview(null); // Close modal on error
+        }
     };
 
     // Calculate grid columns based on number of days
@@ -235,16 +382,31 @@ function MealPlanResult({result}: MealPlanResultProps) {
                                     <div className="meal-plan-result__popup__dishes">
                                         <h5>Meals:</h5>
                                         {dayData.meals.map((meal, index) => (
-                                            <div
-                                                key={index}
-                                                className="meal-plan-result__popup__dish"
-                                                onClick={() => handleDishClick(meal.dish, meal.type, dayData.day)}
-                                            >
-                                                <RestaurantIcon fontSize="small" />
-                                                <div className="meal-plan-result__popup__dish__info">
-                                                    <span className="meal-type">{meal.type}</span>
-                                                    <span className="dish-title">{meal.dish.title}</span>
+                                            <div key={index} className="meal-plan-result__popup__dish-wrapper">
+                                                <div
+                                                    className="meal-plan-result__popup__dish"
+                                                    onClick={() => handleDishClick(meal.dish, meal.type, dayData.day)}
+                                                >
+                                                    <RestaurantIcon fontSize="small" />
+                                                    <div className="meal-plan-result__popup__dish__info">
+                                                        <span className="meal-type">{meal.type}</span>
+                                                        <span className="dish-title">{meal.dish.title}</span>
+                                                    </div>
                                                 </div>
+                                                <IconButton
+                                                    size="small"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleReplaceDish(dayData.day, index);
+                                                    }}
+                                                    sx={{ 
+                                                        color: '#757bc8',
+                                                        '&:hover': { backgroundColor: 'rgba(117, 123, 200, 0.1)' }
+                                                    }}
+                                                    title="Replace this dish"
+                                                >
+                                                    <SwapHorizIcon fontSize="small" />
+                                                </IconButton>
                                             </div>
                                         ))}
                                     </div>
@@ -274,13 +436,40 @@ function MealPlanResult({result}: MealPlanResultProps) {
                                         {selectedDish.dish.cuisine} Cuisine
                                     </p>
                                 </div>
-                                <IconButton
-                                    onClick={handleCloseModal}
-                                    className="meal-plan-result__modal__close"
-                                    sx={{ color: 'rgba(0, 0, 0, 0.6)' }}
-                                >
-                                    <CloseIcon />
-                                </IconButton>
+                                <div className="meal-plan-result__modal__header__actions">
+                                    <Button
+                                        variant="outlined"
+                                        startIcon={<SwapHorizIcon />}
+                                        onClick={() => {
+                                            const dayData = getDayData(selectedDish.dayNumber);
+                                            if (dayData) {
+                                                const mealIndex = dayData.meals.findIndex(
+                                                    m => m.dish.title === selectedDish.dish.title
+                                                );
+                                                if (mealIndex !== -1) {
+                                                    handleReplaceDish(selectedDish.dayNumber, mealIndex);
+                                                }
+                                            }
+                                        }}
+                                        sx={{
+                                            color: '#757bc8',
+                                            borderColor: '#757bc8',
+                                            '&:hover': {
+                                                borderColor: '#6a70b8',
+                                                backgroundColor: 'rgba(117, 123, 200, 0.05)'
+                                            }
+                                        }}
+                                    >
+                                        Replace Dish
+                                    </Button>
+                                    <IconButton
+                                        onClick={handleCloseModal}
+                                        className="meal-plan-result__modal__close"
+                                        sx={{ color: 'rgba(0, 0, 0, 0.6)' }}
+                                    >
+                                        <CloseIcon />
+                                    </IconButton>
+                                </div>
                             </div>
 
                             <p className="meal-plan-result__modal__description">
@@ -347,6 +536,224 @@ function MealPlanResult({result}: MealPlanResultProps) {
                                         ))}
                                     </ol>
                                 </div>
+                            </div>
+                        </>
+                    )}
+                </Box>
+            </Modal>
+
+            {/* Replacement Preview Modal */}
+            <Modal
+                open={!!replacementPreview}
+                onClose={handleCancelReplacement}
+                aria-labelledby="replacement-modal-title"
+            >
+                <Box className="meal-plan-result__replacement-modal">
+                    {replacementPreview && (
+                        <>
+                            <div className="meal-plan-result__replacement-modal__header">
+                                <h2>Replace Dish</h2>
+                                <p>Day {replacementPreview.dayNumber} • {replacementPreview.mealType}</p>
+                                <IconButton
+                                    onClick={handleCancelReplacement}
+                                    sx={{ 
+                                        position: 'absolute',
+                                        right: '1rem',
+                                        top: '1rem',
+                                        color: 'rgba(0, 0, 0, 0.6)' 
+                                    }}
+                                >
+                                    <CloseIcon />
+                                </IconButton>
+                            </div>
+
+                            <div className="meal-plan-result__replacement-modal__content">
+                                {/* Old Dish */}
+                                <div className="meal-plan-result__replacement-modal__dish">
+                                    <div className="meal-plan-result__replacement-modal__dish__label">
+                                        Current Dish
+                                    </div>
+                                    <h3>{replacementPreview.oldDish.title}</h3>
+                                    <p className="cuisine">{replacementPreview.oldDish.cuisine} Cuisine</p>
+                                    <p className="description">{replacementPreview.oldDish.description}</p>
+
+                                    <div className="info-bar">
+                                        <div className="info-item">
+                                            <span className="label">Time</span>
+                                            <span className="value">{replacementPreview.oldDish.estimatedTime} min</span>
+                                        </div>
+                                        <div className="info-item">
+                                            <span className="label">Difficulty</span>
+                                            <span className="value">{replacementPreview.oldDish.difficulty}</span>
+                                        </div>
+                                        <div className="info-item">
+                                            <span className="label">Servings</span>
+                                            <span className="value">{replacementPreview.oldDish.servings}</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="macros">
+                                        <div className="macro">
+                                            <span className="label">Calories</span>
+                                            <span className="value">{replacementPreview.oldDish.calories} kcal</span>
+                                        </div>
+                                        <div className="macro">
+                                            <span className="label">Protein</span>
+                                            <span className="value">{replacementPreview.oldDish.macros.protein}g</span>
+                                        </div>
+                                        <div className="macro">
+                                            <span className="label">Fat</span>
+                                            <span className="value">{replacementPreview.oldDish.macros.fat}g</span>
+                                        </div>
+                                        <div className="macro">
+                                            <span className="label">Carbs</span>
+                                            <span className="value">{replacementPreview.oldDish.macros.carbs}g</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Replace Icon */}
+                                <div className="meal-plan-result__replacement-modal__icon">
+                                    <SwapHorizIcon sx={{ fontSize: '3rem', color: '#757bc8' }} />
+                                </div>
+
+                                {/* New Dish */}
+                                <div className="meal-plan-result__replacement-modal__dish meal-plan-result__replacement-modal__dish--new">
+                                    <div className="meal-plan-result__replacement-modal__dish__label meal-plan-result__replacement-modal__dish__label--new">
+                                        New Suggestion
+                                    </div>
+                                    
+                                    {replacementPreview.loading || !replacementPreview.newDish ? (
+                                        // Loading state
+                                        <div className="meal-plan-result__replacement-modal__dish__loading">
+                                            <CircularProgress 
+                                                size={60} 
+                                                sx={{ 
+                                                    color: '#757bc8',
+                                                    margin: '2rem auto',
+                                                    display: 'block'
+                                                }} 
+                                            />
+                                            <p style={{ 
+                                                textAlign: 'center', 
+                                                color: '#757bc8',
+                                                fontSize: '1.125rem',
+                                                fontWeight: 600,
+                                                margin: '1rem 0'
+                                            }}>
+                                                Generating a delicious alternative...
+                                            </p>
+                                            <Skeleton variant="text" height={40} />
+                                            <Skeleton variant="text" height={30} width="60%" />
+                                            <Skeleton variant="rectangular" height={80} sx={{ marginTop: '1rem', borderRadius: '0.75rem' }} />
+                                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginTop: '1rem' }}>
+                                                <Skeleton variant="rectangular" height={60} sx={{ borderRadius: '0.5rem' }} />
+                                                <Skeleton variant="rectangular" height={60} sx={{ borderRadius: '0.5rem' }} />
+                                                <Skeleton variant="rectangular" height={60} sx={{ borderRadius: '0.5rem' }} />
+                                            </div>
+                                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem', marginTop: '1rem' }}>
+                                                <Skeleton variant="rectangular" height={70} sx={{ borderRadius: '0.5rem' }} />
+                                                <Skeleton variant="rectangular" height={70} sx={{ borderRadius: '0.5rem' }} />
+                                                <Skeleton variant="rectangular" height={70} sx={{ borderRadius: '0.5rem' }} />
+                                                <Skeleton variant="rectangular" height={70} sx={{ borderRadius: '0.5rem' }} />
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        // Loaded dish content
+                                        <>
+                                            <h3>{replacementPreview.newDish.title}</h3>
+                                            <p className="cuisine">{replacementPreview.newDish.cuisine} Cuisine</p>
+                                            <p className="description">{replacementPreview.newDish.description}</p>
+
+                                            <div className="info-bar">
+                                                <div className="info-item">
+                                                    <span className="label">Time</span>
+                                                    <span className="value">{replacementPreview.newDish.estimatedTime} min</span>
+                                                </div>
+                                                <div className="info-item">
+                                                    <span className="label">Difficulty</span>
+                                                    <span className="value">{replacementPreview.newDish.difficulty}</span>
+                                                </div>
+                                                <div className="info-item">
+                                                    <span className="label">Servings</span>
+                                                    <span className="value">{replacementPreview.newDish.servings}</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="macros">
+                                                <div className="macro">
+                                                    <span className="label">Calories</span>
+                                                    <span className="value">{replacementPreview.newDish.calories} kcal</span>
+                                                </div>
+                                                <div className="macro">
+                                                    <span className="label">Protein</span>
+                                                    <span className="value">{replacementPreview.newDish.macros.protein}g</span>
+                                                </div>
+                                                <div className="macro">
+                                                    <span className="label">Fat</span>
+                                                    <span className="value">{replacementPreview.newDish.macros.fat}g</span>
+                                                </div>
+                                                <div className="macro">
+                                                    <span className="label">Carbs</span>
+                                                    <span className="value">{replacementPreview.newDish.macros.carbs}g</span>
+                                                </div>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="meal-plan-result__replacement-modal__actions">
+                                <Button
+                                    variant="outlined"
+                                    onClick={handleCancelReplacement}
+                                    size="large"
+                                    disabled={replacementPreview.loading}
+                                    sx={{ 
+                                        minWidth: '140px',
+                                        color: 'rgba(0, 0, 0, 0.7)',
+                                        borderColor: 'rgba(0, 0, 0, 0.3)',
+                                        '&:hover': {
+                                            borderColor: 'rgba(0, 0, 0, 0.5)',
+                                            backgroundColor: 'rgba(0, 0, 0, 0.05)'
+                                        }
+                                    }}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    variant="outlined"
+                                    startIcon={replacementPreview.loading ? <CircularProgress size={18} sx={{ color: '#757bc8' }} /> : <SwapHorizIcon />}
+                                    onClick={handleTryAgain}
+                                    size="large"
+                                    disabled={replacementPreview.loading}
+                                    sx={{ 
+                                        minWidth: '140px',
+                                        color: '#757bc8',
+                                        borderColor: '#757bc8',
+                                        '&:hover': {
+                                            borderColor: '#6a70b8',
+                                            backgroundColor: 'rgba(117, 123, 200, 0.05)'
+                                        }
+                                    }}
+                                >
+                                    Try Again
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    onClick={handleAcceptReplacement}
+                                    size="large"
+                                    disabled={replacementPreview.loading || !replacementPreview.newDish}
+                                    sx={{ 
+                                        minWidth: '140px',
+                                        background: 'linear-gradient(90deg, #757bc8 0%, #9fa3d4 100%)',
+                                        '&:hover': {
+                                            background: 'linear-gradient(90deg, #6a70b8 0%, #8e92c4 100%)',
+                                        }
+                                    }}
+                                >
+                                    Accept
+                                </Button>
                             </div>
                         </>
                     )}
