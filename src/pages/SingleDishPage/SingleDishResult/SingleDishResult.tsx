@@ -5,7 +5,7 @@ import {generateSingleDishImage, saveSingleDish} from "../../../DataService.ts";
 import Skeleton from '@mui/material/Skeleton';
 import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import {useAppStore} from "../../../store.ts";
 
 type SingleDishResultProps = {
@@ -70,6 +70,9 @@ function SingleDishResult({result}: SingleDishResultProps) {
                 </div>
                 <div className="single-dish-result__data-bar__nutrition">
                     <h4>Nutrition Information</h4>
+                    <p className="single-dish-result__data-bar__nutrition__note">
+                        Per serving (recipe makes {result.servings} servings)
+                    </p>
                     <div className="single-dish-result__data-bar__nutrition__grid">
                         <div className="single-dish-result__data-bar__nutrition__card">
                             <span className="label">Calories</span>

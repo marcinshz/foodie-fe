@@ -3,7 +3,7 @@ import {MealPlanResultType, SingleDishResultType} from "../../../types.ts";
 import {useState, useRef} from "react";
 import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import {useAppStore} from "../../../store.ts";
 import {Modal, Box} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -301,6 +301,9 @@ function MealPlanResult({result}: MealPlanResultProps) {
 
                             <div className="meal-plan-result__modal__macros">
                                 <h4>Macronutrients</h4>
+                                <p className="meal-plan-result__modal__macros__note">
+                                    Per serving (recipe makes {selectedDish.dish.servings} servings)
+                                </p>
                                 <div className="meal-plan-result__modal__macros__grid">
                                     <div className="meal-plan-result__modal__macro">
                                         <span className="label">Protein</span>
