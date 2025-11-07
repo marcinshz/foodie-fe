@@ -1,7 +1,5 @@
 import {DishDifficulty, MealType, RequirementTypes} from "../../enums.ts";
 import './RequirementsForm.scss';
-import {Link} from "react-router-dom";
-import Plate from "../iconComponents/plate.tsx";
 import RequirementsFormStep from "./RequirementsFormStep/RequirementsFormStep.tsx";
 import Button from "@mui/material/Button";
 import React, {useState} from "react";
@@ -53,62 +51,108 @@ function RequirementsForm({type, setSingleDishResult, setMealPlanResult}: Requir
         })
     }
 
+    const isLastStep = (type === RequirementTypes.SingleDish && step === 3) || 
+                       (type === RequirementTypes.MealPlan && step === 4);
+
     return (
         <div className="requirements-form">
-            {loading ? <div className="requirements-form__loading">
-                    <DotLottieReact
-                        src="https://lottie.host/534b0f0b-129c-431c-9409-0c01f483a65e/mH9DH2WwNI.lottie"
-                        loop
-                        autoplay
-                    />
+            {loading ? (
+                <div className="requirements-form__loading">
+                    <div className="requirements-form__loading__content">
+                        <DotLottieReact
+                            src="https://lottie.host/534b0f0b-129c-431c-9409-0c01f483a65e/mH9DH2WwNI.lottie"
+                            loop
+                            autoplay
+                        />
+                        <h3>Cooking up your {type === RequirementTypes.SingleDish ? 'recipe' : 'meal plan'}...</h3>
+                        <p>This might take a moment</p>
+                    </div>
                 </div>
-                :
+            ) : (
                 <>
                     <div className="requirements-form__header">
-                        <div className="requirements-form__header__text">
-                            <h2>First of all, we need to ask you a few questions.</h2>
-                            <p>Please answer following questions to help us provide you with recipes tailored to your
-                                preferences. Answers are optional, but help us understand your taste and
-                                preferences.</p>
+                        <div className="requirements-form__header__badge">
+                            {type === RequirementTypes.SingleDish ? 'Single Dish' : 'Meal Plan'}
                         </div>
-                        <div className="requirements-form__header__invite-to-inspiration">
-                            <p>Wanna skip questions? Click on the plate and try our inspo feature!</p>
-                            <Link to={'/home/inspiration'}>
-                                <div className="requirements-form__header__invite-to-inspiration__plate">
-                                    <Plate/>
-                                </div>
-                            </Link>
-                        </div>
+                        <h1>Let's personalize your {type === RequirementTypes.SingleDish ? 'recipe' : 'meal plan'}</h1>
+                        <p>Answer a few questions to help us create something perfect for you. All fields are optional!</p>
                     </div>
-                    <Stepper activeStep={step} alternativeLabel>
-                        {type === RequirementTypes.SingleDish && SingleDishRequirementsSteps.map((label) => (
-                            <Step key={label} sx={{'.Mui-active, .Mui-completed': {color: '#757bc8'}}}>
-                                <StepLabel>{label}</StepLabel>
-                            </Step>
-                        ))}
-                        {type === RequirementTypes.MealPlan && MealPlanRequirementsSteps.map((label) => (
-                            <Step key={label} sx={{'.Mui-active, .Mui-completed': {color: '#757bc8'}}}>
-                                <StepLabel>{label}</StepLabel>
-                            </Step>
-                        ))}
-                    </Stepper>
-                    <RequirementsFormStep type={type} step={step} formState={formState} handleChange={handleChange}/>
+
+                    <div className="requirements-form__stepper-container">
+                        <Stepper 
+                            activeStep={step} 
+                            alternativeLabel
+                            sx={{
+                                '.MuiStepLabel-label': {
+                                    marginTop: '8px',
+                                    fontSize: '0.95rem',
+                                    fontWeight: 500
+                                },
+                                '.MuiStepLabel-label.Mui-active': {
+                                    color: '#757bc8',
+                                    fontWeight: 600
+                                },
+                                '.MuiStepLabel-label.Mui-completed': {
+                                    color: '#757bc8',
+                                    fontWeight: 600
+                                },
+                                '.MuiStepIcon-root': {
+                                    fontSize: '2rem'
+                                },
+                                '.MuiStepIcon-root.Mui-active': {
+                                    color: '#757bc8'
+                                },
+                                '.MuiStepIcon-root.Mui-completed': {
+                                    color: '#757bc8'
+                                }
+                            }}
+                        >
+                            {type === RequirementTypes.SingleDish && SingleDishRequirementsSteps.map((label) => (
+                                <Step key={label}>
+                                    <StepLabel>{label}</StepLabel>
+                                </Step>
+                            ))}
+                            {type === RequirementTypes.MealPlan && MealPlanRequirementsSteps.map((label) => (
+                                <Step key={label}>
+                                    <StepLabel>{label}</StepLabel>
+                                </Step>
+                            ))}
+                        </Stepper>
+                    </div>
+
+                    <div className="requirements-form__content">
+                        <RequirementsFormStep type={type} step={step} formState={formState} handleChange={handleChange}/>
+                    </div>
+
                     <div className="requirements-form__navigation">
-                        <Button variant="text" color="primary" disabled={step === 0}
-                                onClick={() => setStep(step - 1)}>Back</Button>
-                        {type === RequirementTypes.SingleDish ? step !== 3 ?
-                                <Button variant="text" color="primary" onClick={() => setStep(step + 1)}>Next</Button>
-                                :
-                                <Button variant="text" color="primary" onClick={handleSubmit}>Submit</Button>
-                            :
-                            step !== 4 ?
-                                <Button variant="text" color="primary" onClick={() => setStep(step + 1)}>Next</Button>
-                                :
-                                <Button variant="text" color="primary" onClick={handleSubmit}>Submit</Button>
-                        }
+                        <Button 
+                            variant="outlined" 
+                            color="primary" 
+                            disabled={step === 0}
+                            onClick={() => setStep(step - 1)}
+                            size="large"
+                            sx={{ minWidth: '120px' }}
+                        >
+                            Back
+                        </Button>
+                        <div className="requirements-form__navigation__progress">
+                            Step {step + 1} of {type === RequirementTypes.SingleDish ? 4 : 5}
+                        </div>
+                        <Button 
+                            variant="contained" 
+                            color="primary" 
+                            onClick={isLastStep ? handleSubmit : () => setStep(step + 1)}
+                            size="large"
+                            sx={{ 
+                                minWidth: '120px',
+                                background: isLastStep ? 'linear-gradient(90deg, #757bc8 0%, #9fa3d4 100%)' : undefined
+                            }}
+                        >
+                            {isLastStep ? 'Generate!' : 'Next'}
+                        </Button>
                     </div>
                 </>
-            }
+            )}
         </div>
     );
 }
