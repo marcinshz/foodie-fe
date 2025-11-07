@@ -2,6 +2,7 @@ import './CookBookPage.scss';
 import {Tab, Tabs} from "@mui/material";
 import {useState} from "react";
 import Recipes from "./Recipes/Recipes.tsx";
+import MealPlans from "./MealPlans/MealPlans.tsx";
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -46,10 +47,12 @@ function CookBookPage() {
                 <Recipes/>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-                Item Two
+                <MealPlans/>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-                Item Three
+                <div style={{padding: '3rem', textAlign: 'center'}}>
+                    <h3>Shopping Lists - Coming Soon!</h3>
+                </div>
             </CustomTabPanel>
         </div>
     );

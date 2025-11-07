@@ -143,14 +143,55 @@ export async function generateMealPlan(requirementsInput: MealPlanRequirements):
     return data;
 }
 
-export async function saveMealPlan() {
+export async function saveMealPlan(mealPlanData: MealPlanResultType & { userId: string }) {
+    return fetch(`${URL}/meal-plan`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mealPlanData),
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
 }
 
-export async function getUserMealPlans() {
+export async function getUserMealPlans(userId: string): Promise<(MealPlanResultType & { id: string })[]> {
+    return fetch(`${URL}/meal-plan/by-user/${userId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
 }
 
-export async function getMealPlanById(mealPlanId: string) {
+export async function getMealPlanById(mealPlanId: string): Promise<MealPlanResultType & { id: string }> {
+    return fetch(`${URL}/meal-plan/${mealPlanId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
 }
 
-export async function deleteMealPlan() {
+export async function deleteMealPlan(mealPlanId: string) {
+    return fetch(`${URL}/meal-plan/${mealPlanId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
 }

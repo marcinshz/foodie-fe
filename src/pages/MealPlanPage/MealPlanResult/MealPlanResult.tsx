@@ -8,9 +8,10 @@ import {useAppStore} from "../../../store.ts";
 import {Modal, Box} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
+import {saveMealPlan} from "../../../DataService.ts";
 
 type MealPlanResultProps = {
-    result: MealPlanResultType;
+    result: MealPlanResultType & { id?: string };
 }
 
 type HoveredDay = {
@@ -25,7 +26,7 @@ type SelectedDish = {
 } | null;
 
 function MealPlanResult({result}: MealPlanResultProps) {
-    const [saved, setSaved] = useState(false);
+    const [saved, setSaved] = useState(!!result.id); // If result has ID, it's already saved
     const [hoveredDay, setHoveredDay] = useState<HoveredDay>(null);
     const [selectedDish, setSelectedDish] = useState<SelectedDish>(null);
     const popupRef = useRef<HTMLDivElement>(null);
@@ -33,9 +34,9 @@ function MealPlanResult({result}: MealPlanResultProps) {
     const authData = useAppStore((state) => state.authData);
 
     async function handleSave() {
-        if (authData) {
-            // TODO: Implement save meal plan functionality
-            setSaved(!saved);
+        if (authData && !result.id) {
+            await saveMealPlan({...result, userId: authData.user.id});
+            setSaved(true);
         }
     }
 
@@ -113,8 +114,14 @@ function MealPlanResult({result}: MealPlanResultProps) {
                     <h3>{result.servings}</h3>
                 </div>
                 <div className="meal-plan-result__basic-info-bar__item">
-                    <h4>Save plan</h4>
-                    <IconButton color="primary" size="large" sx={{marginTop: '4px'}} onClick={handleSave}>
+                    <h4>{saved ? 'Saved' : 'Save plan'}</h4>
+                    <IconButton 
+                        color="primary" 
+                        size="large" 
+                        sx={{marginTop: '4px'}} 
+                        onClick={handleSave}
+                        disabled={saved}
+                    >
                         {saved ? <FavoriteIcon/> : <FavoriteBorderIcon/>}
                     </IconButton>
                 </div>
