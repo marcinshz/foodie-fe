@@ -54,113 +54,153 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.25);
     padding: 4rem 0;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    gap: 2rem;
 
-    &__specification {
+    h4 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #757bc8;
+      text-align: center;
+    }
+
+    &__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      max-width: 800px;
+    }
+
+    &__card {
+      background: linear-gradient(135deg, rgba(117, 123, 200, 0.08) 0%, rgba(117, 123, 200, 0.02) 100%);
+      border: 1px solid rgba(117, 123, 200, 0.15);
+      border-radius: 1rem;
+      padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 0.75rem;
       text-align: center;
-      -webkit-box-shadow: 0 0 24px -14px rgba(66, 68, 90, 1);
-      -moz-box-shadow: 0 0 24px -14px rgba(66, 68, 90, 1);
-      box-shadow: 0 0 24px -14px rgba(66, 68, 90, 1);
-      border-radius: 1rem;
-      padding: 2rem;
+      transition: all 0.3s ease;
 
-      h5, h6 {
-        margin: 0;
-        font-weight: 500;
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(117, 123, 200, 0.15);
+        border-color: rgba(117, 123, 200, 0.3);
       }
 
-      h5 {
-        font-size: 1.25rem;
+      .label {
+        font-size: 0.875rem;
+        color: rgba(0, 0, 0, 0.6);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .value {
+        font-size: 1.75rem;
+        font-weight: 700;
         color: #757bc8;
       }
     }
   }
 
-  &__days {
+  &__calendar {
     display: flex;
     flex-direction: column;
     gap: 2rem;
 
     h2 {
       text-align: center;
-      margin: 0 0 2rem 0;
+      margin: 0;
       font-size: 2rem;
     }
-  }
 
-  &__day {
-    -webkit-box-shadow: 0 0 24px -16px rgba(66, 68, 90, 1);
-    -moz-box-shadow: 0 0 24px -16px rgba(66, 68, 90, 1);
-    box-shadow: 0 0 24px -16px rgba(66, 68, 90, 1);
-    border-radius: 0.75rem !important;
-    margin-bottom: 1rem !important;
-
-    &::before {
-      display: none;
+    &__instruction {
+      text-align: center;
+      margin: 0;
+      color: rgba(0, 0, 0, 0.6);
+      font-size: 1rem;
     }
 
-    &__header {
-      padding: 1.5rem 2rem !important;
-
-      &__content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-
-        &__title {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-
-          h3 {
-            margin: 0;
-            font-size: 1.5rem;
-            color: #757bc8;
-          }
-
-          p {
-            margin: 0;
-            font-size: 0.9rem;
-            color: rgba(0, 0, 0, 0.6);
-          }
-        }
-
-        &__totals {
-          display: flex;
-          gap: 1.5rem;
-          font-weight: 500;
-          font-size: 0.9rem;
-
-          span {
-            background: rgba(117, 123, 200, 0.1);
-            padding: 0.25rem 0.75rem;
-            border-radius: 0.5rem;
-            color: #757bc8;
-          }
-        }
-      }
+    &__grid {
+      display: grid;
+      gap: 1.5rem;
+      margin-top: 2rem;
     }
 
-    &__content {
-      padding: 0 2rem 2rem 2rem !important;
-    }
-
-    &__meals {
+    &__day {
+      background: linear-gradient(135deg, rgba(117, 123, 200, 0.08) 0%, rgba(117, 123, 200, 0.02) 100%);
+      border: 2px solid rgba(117, 123, 200, 0.15);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-height: 150px;
       display: flex;
       flex-direction: column;
-      gap: 2rem;
+      justify-content: space-between;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(117, 123, 200, 0.25);
+        border-color: rgba(117, 123, 200, 0.4);
+        background: linear-gradient(135deg, rgba(117, 123, 200, 0.12) 0%, rgba(117, 123, 200, 0.04) 100%);
+      }
+
+      &__number {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #757bc8;
+        margin-bottom: 0.75rem;
+      }
+
+      &__preview {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      &__calories {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: rgba(0, 0, 0, 0.85);
+      }
+
+      &__meals-count {
+        font-size: 0.9rem;
+        color: rgba(0, 0, 0, 0.6);
+        font-weight: 500;
+      }
     }
   }
 
-  &__meal {
-    background: rgba(229, 228, 226, 0.15);
-    border-radius: 0.75rem;
+  &__popup {
+    position: fixed;
+    transform: translate(-50%, calc(-100% - 20px));
+    background: white;
+    border-radius: 1rem;
     padding: 1.5rem;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    min-width: 320px;
+    max-width: 400px;
+    pointer-events: all;
+    animation: popupFadeIn 0.2s ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 10px solid white;
+    }
 
     &__header {
       display: flex;
@@ -168,88 +208,320 @@
       align-items: center;
       margin-bottom: 1rem;
       padding-bottom: 1rem;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      border-bottom: 2px solid rgba(117, 123, 200, 0.15);
 
       h4 {
         margin: 0;
-        font-size: 1.25rem;
+        font-size: 1.5rem;
+        font-weight: 700;
         color: #757bc8;
-        font-weight: 600;
+      }
+    }
+
+    &__time {
+      font-size: 0.85rem;
+      color: rgba(0, 0, 0, 0.6);
+      font-weight: 500;
+    }
+
+    &__macros {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    &__macro {
+      background: rgba(117, 123, 200, 0.08);
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      .label {
+        font-size: 0.75rem;
+        color: rgba(0, 0, 0, 0.6);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
 
-      &__info {
-        display: flex;
-        gap: 1rem;
-        font-size: 0.85rem;
-        
-        span {
-          background: white;
-          padding: 0.25rem 0.75rem;
-          border-radius: 0.5rem;
-          color: rgba(0, 0, 0, 0.7);
-          font-weight: 500;
-        }
+      .value {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #757bc8;
+      }
+    }
+
+    &__dishes {
+      h5 {
+        margin: 0 0 0.75rem 0;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: rgba(0, 0, 0, 0.7);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
     }
 
     &__dish {
-      &__description {
-        margin: 0.5rem 0 1.5rem 0;
-        font-size: 1rem;
-        color: rgba(0, 0, 0, 0.7);
-        line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: rgba(229, 228, 226, 0.2);
+
+      &:hover {
+        background: rgba(117, 123, 200, 0.15);
+        transform: translateX(4px);
       }
 
-      h5 {
-        margin: 0 0 0.5rem 0;
-        font-size: 1.125rem;
-        font-weight: 600;
+      svg {
+        color: #757bc8;
+        margin-top: 2px;
+        flex-shrink: 0;
       }
 
-      &__details {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 2rem;
-        margin-top: 1.5rem;
-      }
+      &__info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        flex: 1;
+        min-width: 0;
 
-      &__ingredients, &__instructions {
-        h6 {
-          margin: 0 0 1rem 0;
-          font-weight: 600;
+        .meal-type {
+          font-size: 0.75rem;
           color: #757bc8;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
         }
 
-        .ingredients-list {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-
-          .ingredient-item {
-            background: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 0.5rem;
-            font-size: 0.9rem;
-            color: rgba(0, 0, 0, 0.8);
-          }
+        .dish-title {
+          font-size: 0.95rem;
+          font-weight: 600;
+          color: rgba(0, 0, 0, 0.85);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
+      }
+    }
+  }
 
-        ol {
-          margin: 0;
-          padding-left: 1.25rem;
+  &__modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 1.5rem;
+    padding: 3rem;
+    max-width: 900px;
+    width: 90vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+
+    &:focus-visible {
+      outline: none;
+    }
+
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+      gap: 2rem;
+
+      &__info {
+        flex: 1;
+      }
+    }
+
+    &__day-label {
+      display: inline-block;
+      background: rgba(117, 123, 200, 0.1);
+      color: #757bc8;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    &__close {
+      flex-shrink: 0;
+    }
+
+    h2 {
+      margin: 0 0 0.5rem 0;
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: rgba(0, 0, 0, 0.9);
+    }
+
+    &__cuisine {
+      margin: 0;
+      font-size: 1.125rem;
+      color: #757bc8;
+      font-weight: 600;
+    }
+
+    &__description {
+      font-size: 1.125rem;
+      color: rgba(0, 0, 0, 0.7);
+      line-height: 1.6;
+      margin: 0 0 2rem 0;
+      padding: 1.5rem;
+      background: rgba(229, 228, 226, 0.15);
+      border-radius: 0.75rem;
+      border-left: 4px solid #757bc8;
+    }
+
+    &__info-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    &__info-item {
+      background: linear-gradient(135deg, rgba(117, 123, 200, 0.08) 0%, rgba(117, 123, 200, 0.02) 100%);
+      padding: 1rem;
+      border-radius: 0.75rem;
+      text-align: center;
+      border: 1px solid rgba(117, 123, 200, 0.15);
+
+      .label {
+        display: block;
+        font-size: 0.75rem;
+        color: rgba(0, 0, 0, 0.6);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.5rem;
+      }
+
+      .value {
+        display: block;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #757bc8;
+      }
+    }
+
+    &__macros {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: rgba(229, 228, 226, 0.15);
+      border-radius: 0.75rem;
+
+      h4 {
+        margin: 0 0 1rem 0;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: rgba(0, 0, 0, 0.85);
+      }
+
+      &__grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+    }
+
+    &__macro {
+      background: white;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      text-align: center;
+
+      .label {
+        display: block;
+        font-size: 0.875rem;
+        color: rgba(0, 0, 0, 0.6);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .value {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #757bc8;
+      }
+    }
+
+    &__content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    &__ingredients, &__instructions {
+      h4 {
+        margin: 0 0 1rem 0;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: rgba(0, 0, 0, 0.85);
+      }
+
+      .ingredients-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+
+        .ingredient-item {
+          background: rgba(117, 123, 200, 0.1);
+          color: #757bc8;
+          padding: 0.5rem 1rem;
+          border-radius: 0.5rem;
+          font-size: 0.9rem;
+          font-weight: 500;
+          border: 1px solid rgba(117, 123, 200, 0.2);
+        }
+      }
+
+      ol {
+        margin: 0;
+        padding-left: 1.5rem;
+        
+        li {
+          margin-bottom: 1rem;
+          line-height: 1.6;
+          font-size: 1rem;
+          color: rgba(0, 0, 0, 0.8);
           
-          li {
-            margin-bottom: 0.75rem;
-            line-height: 1.4;
-            font-size: 0.95rem;
-            
-            &:last-child {
-              margin-bottom: 0;
-            }
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          &::marker {
+            color: #757bc8;
+            font-weight: 700;
           }
         }
       }
     }
+  }
+}
+
+@keyframes popupFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-100% - 30px));
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, calc(-100% - 20px));
   }
 }
 
@@ -259,26 +531,28 @@
       gap: 3rem;
     }
 
-    &__day {
-      &__header {
-        &__content {
-          flex-direction: column;
-          gap: 1rem;
-          align-items: flex-start;
-
-          &__totals {
-            gap: 1rem;
-          }
-        }
+    &__calendar {
+      &__grid {
+        grid-template-columns: repeat(3, 1fr) !important;
       }
     }
 
-    &__meal {
-      &__dish {
-        &__details {
-          grid-template-columns: 1fr;
-          gap: 1.5rem;
+    &__modal {
+      padding: 2rem;
+      width: 95vw;
+
+      &__info-bar {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      &__macros {
+        &__grid {
+          grid-template-columns: repeat(3, 1fr);
         }
+      }
+
+      &__content {
+        grid-template-columns: 1fr;
       }
     }
   }
@@ -294,26 +568,70 @@
     }
 
     &__targets-section {
-      &__specification {
-        width: 100%;
-        max-width: 300px;
+      &__grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 400px;
       }
     }
 
-    &__meal {
-      &__header {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: flex-start;
+    &__calendar {
+      &__grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
 
-        &__info {
-          gap: 0.5rem;
-          
-          span {
-            font-size: 0.8rem;
-          }
+    &__popup {
+      min-width: 280px;
+      max-width: calc(100vw - 40px);
+      padding: 1.25rem;
+    }
+
+    &__modal {
+      padding: 1.5rem;
+
+      h2 {
+        font-size: 1.75rem;
+      }
+
+      &__info-bar {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      &__macros {
+        &__grid {
+          grid-template-columns: repeat(3, 1fr);
         }
       }
     }
   }
 }
+
+@media screen and (max-width: 480px) {
+  .meal-plan-result {
+    &__targets-section {
+      &__grid {
+        grid-template-columns: 1fr;
+        max-width: 280px;
+      }
+    }
+
+    &__calendar {
+      &__grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
+    &__modal {
+      &__info-bar {
+        grid-template-columns: 1fr;
+      }
+
+      &__macros {
+        &__grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+  }
+}
+

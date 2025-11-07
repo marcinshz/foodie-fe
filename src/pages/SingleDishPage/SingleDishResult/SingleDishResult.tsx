@@ -1,6 +1,5 @@
 import './SingleDishResult.scss'
 import {SingleDishResultType} from "../../../types.ts";
-import {PieChart} from '@mui/x-charts/PieChart';
 import {useEffect, useState} from "react";
 import {generateSingleDishImage, saveSingleDish} from "../../../DataService.ts";
 import Skeleton from '@mui/material/Skeleton';
@@ -66,25 +65,29 @@ function SingleDishResult({result}: SingleDishResultProps) {
                 </div>
             </div>
             <div className="single-dish-result__data-bar">
-                <div className="single-dish-result__data-bar__specification">
-                    <h5>Calories: {result.calories} kcal</h5>
-                    <h5>Macros [grams]:</h5>
-                    <PieChart
-                        series={[
-                            {
-                                data: [
-                                    {id: 0, value: result.macros.carbs, label: 'Carbs'},
-                                    {id: 1, value: result.macros.protein, label: 'Protein'},
-                                    {id: 2, value: result.macros.fat, label: 'Fat'},
-                                ],
-                            },
-                        ]}
-                        width={100}
-                        height={100}
-                    />
-                </div>
                 <div className="single-dish-result__data-bar__description">
                     <p>{result.description}</p>
+                </div>
+                <div className="single-dish-result__data-bar__nutrition">
+                    <h4>Nutrition Information</h4>
+                    <div className="single-dish-result__data-bar__nutrition__grid">
+                        <div className="single-dish-result__data-bar__nutrition__card">
+                            <span className="label">Calories</span>
+                            <span className="value">{result.calories} kcal</span>
+                        </div>
+                        <div className="single-dish-result__data-bar__nutrition__card">
+                            <span className="label">Protein</span>
+                            <span className="value">{result.macros.protein}g</span>
+                        </div>
+                        <div className="single-dish-result__data-bar__nutrition__card">
+                            <span className="label">Fat</span>
+                            <span className="value">{result.macros.fat}g</span>
+                        </div>
+                        <div className="single-dish-result__data-bar__nutrition__card">
+                            <span className="label">Carbs</span>
+                            <span className="value">{result.macros.carbs}g</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className="single-dish-result__lists">
