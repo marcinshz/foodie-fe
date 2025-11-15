@@ -3,6 +3,7 @@ import {Tab, Tabs} from "@mui/material";
 import {useState} from "react";
 import Recipes from "./Recipes/Recipes.tsx";
 import MealPlans from "./MealPlans/MealPlans.tsx";
+import ShoppingLists from "./ShoppingLists/ShoppingLists.tsx";
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -50,9 +51,7 @@ function CookBookPage() {
                 <MealPlans/>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-                <div style={{padding: '3rem', textAlign: 'center'}}>
-                    <h3>Shopping Lists - Coming Soon!</h3>
-                </div>
+                <ShoppingLists/>
             </CustomTabPanel>
         </div>
     );

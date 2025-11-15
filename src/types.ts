@@ -73,6 +73,7 @@ export type MealPlanPracticalRequirements = {
     timePerDay?: number,
     difficulty?: DishDifficulty,
     servings?: number,
+    shoppingFrequencyDays?: number,
 }
 
 export type MealPlanDietaryRequirements = {
@@ -86,6 +87,23 @@ export type MealPlanDietaryRequirements = {
 export type MealPlanBlacklistRequirements = {
     blacklistedIngredients?: string[],
     allergens?: string[],
+}
+
+export type ShoppingListItem = {
+    ingredient: string;
+    estimatedShelfLife: number;
+    usedInDays: Array<number>;
+    category?: string;
+    checked?: boolean; // For UI state
+}
+
+export type ShoppingList = {
+    id?: string;
+    shoppingDay: number;
+    validForDays: Array<number>;
+    items: Array<ShoppingListItem>;
+    isPinned?: boolean;
+    mealPlanTitle?: string; // For pinned lists display
 }
 
 export type MealPlanResultType = {
@@ -114,4 +132,5 @@ export type MealPlanResultType = {
             dish: SingleDishResultType; // each dish contains per-serving values
         }>;
     }>;
+    shoppingLists?: Array<ShoppingList>;
 }

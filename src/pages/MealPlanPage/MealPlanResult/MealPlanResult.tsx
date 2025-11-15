@@ -10,6 +10,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import {saveMealPlan, replaceDish, updateMealPlan} from "../../../DataService.ts";
+import ShoppingList from "../../../components/ShoppingList/ShoppingList.tsx";
 
 type MealPlanResultProps = {
     result: MealPlanResultType & { id?: string };
@@ -47,8 +48,15 @@ function MealPlanResult({result: initialResult}: MealPlanResultProps) {
 
     async function handleSave() {
         if (authData && !result.id) {
-            await saveMealPlan({...result, userId: authData.user.id});
-            setSaved(true);
+            try {
+                const savedMealPlan = await saveMealPlan({...result, userId: authData.user.id});
+                // Update the result with the saved data (includes IDs for shopping lists)
+                setResult(savedMealPlan);
+                setSaved(true);
+            } catch (error) {
+                console.error('Failed to save meal plan:', error);
+                alert('Failed to save meal plan. Please try again.');
+            }
         }
     }
 
@@ -425,6 +433,33 @@ function MealPlanResult({result: initialResult}: MealPlanResultProps) {
                     </div>
                 )}
             </div>
+
+            {result.shoppingLists && result.shoppingLists.length > 0 && (
+                <div className="meal-plan-result__shopping-section">
+                    <h2>Shopping Lists</h2>
+                    <p className="meal-plan-result__shopping-section__description">
+                        {result.shoppingLists.length === 1 
+                            ? 'Your complete shopping list for the meal plan'
+                            : `${result.shoppingLists.length} shopping trips planned to keep ingredients fresh`
+                        }
+                    </p>
+                    {!saved && (
+                        <p className="meal-plan-result__shopping-section__hint">
+                            💡 Save your meal plan to pin shopping lists to your Lists Board
+                        </p>
+                    )}
+                    <div className="meal-plan-result__shopping-section__grid">
+                        {result.shoppingLists.map((list, index) => (
+                            <ShoppingList 
+                                key={list.id || index}
+                                shoppingList={list}
+                                listNumber={index + 1}
+                                totalLists={result.shoppingLists!.length}
+                            />
+                        ))}
+                    </div>
+                </div>
+            )}
 
             {/* Dish Detail Modal */}
             <Modal

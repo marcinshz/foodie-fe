@@ -248,3 +248,70 @@ export async function replaceDish(replaceRequest: {
 
     return data;
 }
+
+// Shopping List Endpoints
+export async function pinShoppingList(shoppingListId: string) {
+    return fetch(`${URL}/shopping-list/${shoppingListId}/pin`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function unpinShoppingList(shoppingListId: string) {
+    return fetch(`${URL}/shopping-list/${shoppingListId}/unpin`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function getPinnedUserShoppingLists(userId: string) {
+    return fetch(`${URL}/shopping-list/by-user/${userId}/pinned`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function deleteShoppingList(shoppingListId: string) {
+    return fetch(`${URL}/shopping-list/${shoppingListId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function updateShoppingListItemChecked(shoppingListId: string, itemIndex: number, checked: boolean) {
+    return fetch(`${URL}/shopping-list/${shoppingListId}/item/${itemIndex}/check`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ checked }),
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}

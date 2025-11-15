@@ -180,6 +180,12 @@ const MealPlanPracticalStepInputs = [
         key: "servings",
         description: "For how many people should the meals be prepared?",
         type: RequirementsFormInputTypes.Number
+    },
+    {
+        label: "Shopping Frequency (days)",
+        key: "shoppingFrequencyDays",
+        description: "How often do you want to shop? (e.g., 7 for once a week)",
+        type: RequirementsFormInputTypes.Number
     }
 ]
 
@@ -248,6 +254,7 @@ export const MealPlanRequirementsState: MealPlanRequirements = {
     timePerDay: undefined,
     difficulty: DishDifficulty.Casual,
     servings: 1,
+    shoppingFrequencyDays: 7,
     dietType: "",
     caloriesPerDay: undefined,
     highProtein: false,
