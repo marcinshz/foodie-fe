@@ -4,7 +4,6 @@ import {deleteMealPlan, getUserMealPlans} from "../../../DataService.ts";
 import {useEffect, useState} from "react";
 import {MealPlanResultType} from "../../../types.ts";
 import {Link} from "react-router-dom";
-import Button from "@mui/material/Button";
 import {IconButton} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -31,9 +30,19 @@ function MealPlanCard({mealPlan, fetchMealPlans}: {
         <Link to={`/home/meal-plan/${mealPlan.id}`} className="meal-plan-card">
             <div className="meal-plan-card__header">
                 <h3 className="meal-plan-card__title">{mealPlan.title}</h3>
-                <span className="meal-plan-card__days-badge">
-                    {mealPlan.days} {mealPlan.days === 1 ? 'Day' : 'Days'}
-                </span>
+                <div className="meal-plan-card__header-actions">
+                    <span className="meal-plan-card__days-badge">
+                        {mealPlan.days} {mealPlan.days === 1 ? 'Day' : 'Days'}
+                    </span>
+                    <IconButton 
+                        aria-label="delete" 
+                        color="error"
+                        onClick={handleDelete}
+                        className="meal-plan-card__delete"
+                    >
+                        <DeleteIcon/>
+                    </IconButton>
+                </div>
             </div>
             
             <p className="meal-plan-card__description">{mealPlan.description}</p>
@@ -78,24 +87,6 @@ function MealPlanCard({mealPlan, fetchMealPlans}: {
                     )}
                 </div>
             )}
-
-            <div className="meal-plan-card__actions">
-                <Button 
-                    variant="outlined" 
-                    color="primary"
-                    fullWidth
-                >
-                    View Plan
-                </Button>
-                <IconButton 
-                    aria-label="delete" 
-                    color="error"
-                    onClick={handleDelete}
-                    className="meal-plan-card__delete"
-                >
-                    <DeleteIcon/>
-                </IconButton>
-            </div>
         </Link>
     )
 }

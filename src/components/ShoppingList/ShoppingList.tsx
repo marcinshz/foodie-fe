@@ -3,7 +3,6 @@ import { ShoppingList as ShoppingListType, ShoppingListItem } from '../../types'
 import { useState, useEffect } from 'react';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -114,18 +113,26 @@ function ShoppingList({ shoppingList, listNumber, totalLists, onPinChange }: Sho
                 {/* Header */}
                 <div className="shopping-list__header">
                     <div className="shopping-list__header__title-section">
-                        <LocalGroceryStoreIcon className="shopping-list__header__icon" />
-                        <div>
-                            <h3>
-                                {shoppingList.mealPlanTitle ? shoppingList.mealPlanTitle : 'Shopping List'} 
-                                {totalLists > 1 ? ` #${listNumber}` : ''}
-                            </h3>
-                            <p className="shopping-list__header__subtitle">
-                                {totalCount} items • {checkedCount} checked
-                            </p>
-                        </div>
+                        <h3>
+                            {shoppingList.mealPlanTitle ? shoppingList.mealPlanTitle : 'Shopping List'} 
+                            {totalLists > 1 ? ` #${listNumber}` : ''}
+                        </h3>
+                        <p className="shopping-list__header__subtitle">
+                            {totalCount} items • {checkedCount} checked
+                        </p>
                     </div>
                     <div className="shopping-list__header__actions">
+                        <div className="shopping-list__progress">
+                            <div className="shopping-list__progress__bar">
+                                <div 
+                                    className="shopping-list__progress__fill"
+                                    style={{ width: `${(checkedCount / totalCount) * 100}%` }}
+                                />
+                            </div>
+                            <span className="shopping-list__progress__text">
+                                {Math.round((checkedCount / totalCount) * 100)}%
+                            </span>
+                        </div>
                         {shoppingList.id && (
                             <IconButton
                                 onClick={handlePinToggle}
@@ -140,17 +147,6 @@ function ShoppingList({ shoppingList, listNumber, totalLists, onPinChange }: Sho
                                 )}
                             </IconButton>
                         )}
-                        <div className="shopping-list__progress">
-                            <div className="shopping-list__progress__bar">
-                                <div 
-                                    className="shopping-list__progress__fill"
-                                    style={{ width: `${(checkedCount / totalCount) * 100}%` }}
-                                />
-                            </div>
-                            <span className="shopping-list__progress__text">
-                                {Math.round((checkedCount / totalCount) * 100)}%
-                            </span>
-                        </div>
                     </div>
                 </div>
 

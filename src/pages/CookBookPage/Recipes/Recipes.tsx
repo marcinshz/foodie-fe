@@ -4,7 +4,6 @@ import {deleteRecipe, getUserRecipes} from "../../../DataService.ts";
 import {useEffect, useState} from "react";
 import {SingleDishResultType} from "../../../types.ts";
 import {Link} from "react-router-dom";
-import Button from "@mui/material/Button";
 import {IconButton} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -23,17 +22,21 @@ function RecipeCard({recipe, fetchRecipes}: {
         fetchRecipes();
     }
 
-    const handleAddToPlan = (e: React.MouseEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        // TODO: Implement add to plan functionality
-    }
-
     return (
         <Link to={`/home/single-dish/${recipe.id}`} className="recipe-card">
             <div className="recipe-card__header">
-                <h3 className="recipe-card__title">{recipe.title}</h3>
-                <span className="recipe-card__cuisine">{recipe.cuisine}</span>
+                <div className="recipe-card__header-content">
+                    <h3 className="recipe-card__title">{recipe.title}</h3>
+                    <span className="recipe-card__cuisine">{recipe.cuisine}</span>
+                </div>
+                <IconButton 
+                    aria-label="delete" 
+                    color="error"
+                    onClick={handleDelete}
+                    className="recipe-card__delete"
+                >
+                    <DeleteIcon/>
+                </IconButton>
             </div>
             
             <p className="recipe-card__description">{recipe.description}</p>
@@ -69,25 +72,6 @@ function RecipeCard({recipe, fetchRecipes}: {
                     <span className="label">Carbs</span>
                     <span className="value">{recipe.macros.carbs}g</span>
                 </div>
-            </div>
-
-            <div className="recipe-card__actions">
-                <Button 
-                    variant="outlined" 
-                    color="primary"
-                    onClick={handleAddToPlan}
-                    fullWidth
-                >
-                    Add to plan
-                </Button>
-                <IconButton 
-                    aria-label="delete" 
-                    color="error"
-                    onClick={handleDelete}
-                    className="recipe-card__delete"
-                >
-                    <DeleteIcon/>
-                </IconButton>
             </div>
         </Link>
     )
