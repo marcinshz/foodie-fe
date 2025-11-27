@@ -58,20 +58,6 @@ export async function generateSingleDishDefault(requirementsInput: SingleDishReq
     return data;
 }
 
-export async function generateSingleDishImage(dishData: SingleDishResultType) {
-    return fetch(`${URL}/openai/single-dish-image`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dishData),
-    }).then(res => {
-        return res.json()
-    }).then((data) => {
-        return data
-    });
-}
-
 export async function saveSingleDish(dishData: SingleDishResultType & { userId: string }) {
     return fetch(`${URL}/recipe`, {
         method: "POST",

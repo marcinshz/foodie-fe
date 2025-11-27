@@ -1,29 +1,19 @@
 import './SingleDishResult.scss'
 import {SingleDishResultType} from "../../../types.ts";
-import {useEffect, useState} from "react";
-import {generateSingleDishImage, saveSingleDish} from "../../../DataService.ts";
-import Skeleton from '@mui/material/Skeleton';
+import {saveSingleDish} from "../../../DataService.ts";
 import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import {useAppStore} from "../../../store.ts";
+import { useState } from 'react';
 
 type SingleDishResultProps = {
     result: SingleDishResultType;
 }
 
 function SingleDishResult({result}: SingleDishResultProps) {
-    const [image, setImage] = useState("");
     const [saved, setSaved] = useState(false);
     const authData = useAppStore((state) => state.authData);
-
-    useEffect(() => {
-        if (result || !image) {
-/*            generateSingleDishImage(result).then((data) => {
-                setImage(data.url);
-            });*/
-        }
-    }, [result]);
 
     async function handleSave() {
         if (authData) {
@@ -34,8 +24,6 @@ function SingleDishResult({result}: SingleDishResultProps) {
 
     return (
         <div className="single-dish-result">
-            {image ? <img src={image} alt="dish" loading="lazy"/> :
-                <Skeleton variant="rectangular" width={'100%'} height={600}/>}
             <div className="single-dish-result__header">
                 <h3>Let's cook</h3>
                 <h1>{result.title}</h1>
