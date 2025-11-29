@@ -58,6 +58,20 @@ export async function generateSingleDishDefault(requirementsInput: SingleDishReq
     return data;
 }
 
+export async function generateSingleDishImage(dishData: SingleDishResultType) {
+    return fetch(`${URL}/openai/single-dish-image`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dishData),
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
 export async function saveSingleDish(dishData: SingleDishResultType & { userId: string }) {
     return fetch(`${URL}/recipe`, {
         method: "POST",
@@ -113,6 +127,42 @@ export async function deleteRecipe(recipeId: string) {
 
 export async function generateMealPlan(requirementsInput: MealPlanRequirements): Promise<MealPlanResultType> {
     const res = await fetch(`${URL}/openai/meal-plan-default`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requirementsInput),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.message || 'Meal plan generation failed');
+    }
+
+    return data;
+}
+
+export async function generateMealPlanMultistep(requirementsInput: MealPlanRequirements): Promise<MealPlanResultType> {
+    const res = await fetch(`${URL}/openai/meal-plan-multistep`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requirementsInput),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.message || 'Meal plan generation failed');
+    }
+
+    return data;
+}
+
+export async function generateMealPlanCyclic(requirementsInput: MealPlanRequirements): Promise<MealPlanResultType> {
+    const res = await fetch(`${URL}/openai/meal-plan-cyclic`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -195,6 +245,41 @@ export async function updateMealPlan(mealPlanId: string, mealPlanData: MealPlanR
 
     if (!res.ok) {
         throw new Error(data.message || 'Meal plan update failed');
+    }
+
+    return data;
+}
+
+export async function replaceDish(replaceRequest: {
+    mealType: string;
+    targetCalories?: number;
+    targetProtein?: number;
+    targetFat?: number;
+    targetCarbs?: number;
+    servings: number;
+    cuisine?: string[];
+    maxTime?: number;
+    difficulty?: string;
+    dietType?: string;
+    highProtein?: boolean;
+    lowFat?: boolean;
+    lowCarbs?: boolean;
+    blacklistedIngredients?: string[];
+    allergens?: string[];
+    currentDishTitle?: string;
+}): Promise<SingleDishResultType> {
+    const res = await fetch(`${URL}/openai/replace-dish`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(replaceRequest),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.message || 'Dish replacement failed');
     }
 
     return data;

@@ -3,12 +3,18 @@ import './RequirementsForm.scss';
 import RequirementsFormStep from "./RequirementsFormStep/RequirementsFormStep.tsx";
 import Button from "@mui/material/Button";
 import React, {useState} from "react";
-import {Step, StepLabel, Stepper} from "@mui/material";
+import {FormControl, InputLabel, MenuItem, Select, Step, StepLabel, Stepper} from "@mui/material";
 import {MealPlanRequirementsSteps, SingleDishRequirementsSteps} from "../../constants.ts";
 import {getRequirementsFormState} from "./RequirementsFormStep/formStepTemplates.ts";
 import {MealPlanResultType, SingleDishResultType} from "../../types.ts";
 import {DotLottieReact} from '@lottiefiles/dotlottie-react';
-import {generateMealPlan, generateSingleDishDefault} from "../../DataService.ts";
+import {generateMealPlan, generateMealPlanMultistep, generateMealPlanCyclic, generateSingleDishDefault} from "../../DataService.ts";
+
+export enum MealPlanGenerationMethod {
+    Default = 'default',
+    Multistep = 'multistep',
+    Cyclic = 'cyclic',
+}
 
 type RequirementsFormProps = {
     type: RequirementTypes;
@@ -20,6 +26,7 @@ function RequirementsForm({type, setSingleDishResult, setMealPlanResult}: Requir
     const [step, setStep] = useState(0);
     const [formState, setFormState] = useState(getRequirementsFormState(type));
     const [loading, setLoading] = useState(false);
+    const [generationMethod, setGenerationMethod] = useState<MealPlanGenerationMethod>(MealPlanGenerationMethod.Default);
 
     const handleSubmit = async () => {
         // TODO: Add error handling
@@ -35,7 +42,19 @@ function RequirementsForm({type, setSingleDishResult, setMealPlanResult}: Requir
                     }
                     break;
                 case RequirementTypes.MealPlan:
-                    const mealPlanData = await generateMealPlan(formState);
+                    let mealPlanData;
+                    switch (generationMethod) {
+                        case MealPlanGenerationMethod.Multistep:
+                            mealPlanData = await generateMealPlanMultistep(formState);
+                            break;
+                        case MealPlanGenerationMethod.Cyclic:
+                            mealPlanData = await generateMealPlanCyclic(formState);
+                            break;
+                        case MealPlanGenerationMethod.Default:
+                        default:
+                            mealPlanData = await generateMealPlan(formState);
+                            break;
+                    }
                     if (mealPlanData && setMealPlanResult) {
                         setLoading(false);
                         setMealPlanResult(mealPlanData);
@@ -138,18 +157,46 @@ function RequirementsForm({type, setSingleDishResult, setMealPlanResult}: Requir
                         <div className="requirements-form__navigation__progress">
                             Step {step + 1} of {type === RequirementTypes.SingleDish ? 4 : 5}
                         </div>
-                        <Button 
-                            variant="contained" 
-                            color="primary" 
-                            onClick={isLastStep ? handleSubmit : () => setStep(step + 1)}
-                            size="large"
-                            sx={{ 
-                                minWidth: '120px',
-                                background: isLastStep ? 'linear-gradient(90deg, #757bc8 0%, #9fa3d4 100%)' : undefined
-                            }}
-                        >
-                            {isLastStep ? 'Generate!' : 'Next'}
-                        </Button>
+                        <div className="requirements-form__navigation__actions">
+                            {type === RequirementTypes.MealPlan && isLastStep && (
+                                <FormControl size="small" sx={{ minWidth: 140 }}>
+                                    <InputLabel id="generation-method-label">Method</InputLabel>
+                                    <Select
+                                        labelId="generation-method-label"
+                                        value={generationMethod}
+                                        label="Method"
+                                        onChange={(e) => setGenerationMethod(e.target.value as MealPlanGenerationMethod)}
+                                        sx={{
+                                            '.MuiOutlinedInput-notchedOutline': {
+                                                borderColor: '#757bc8',
+                                            },
+                                            '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: '#9fa3d4',
+                                            },
+                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: '#757bc8',
+                                            },
+                                        }}
+                                    >
+                                        <MenuItem value={MealPlanGenerationMethod.Default}>Default</MenuItem>
+                                        <MenuItem value={MealPlanGenerationMethod.Multistep}>Multistep</MenuItem>
+                                        <MenuItem value={MealPlanGenerationMethod.Cyclic}>Cyclic</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            )}
+                            <Button 
+                                variant="contained" 
+                                color="primary" 
+                                onClick={isLastStep ? handleSubmit : () => setStep(step + 1)}
+                                size="large"
+                                sx={{ 
+                                    minWidth: '120px',
+                                    background: isLastStep ? 'linear-gradient(90deg, #757bc8 0%, #9fa3d4 100%)' : undefined
+                                }}
+                            >
+                                {isLastStep ? 'Generate!' : 'Next'}
+                            </Button>
+                        </div>
                     </div>
                 </>
             )}
