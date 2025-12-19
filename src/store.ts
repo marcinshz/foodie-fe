@@ -18,11 +18,6 @@ interface Action {
     removeAuthData: () => void;
 }
 
-export const useAuthStore = create((set) => ({
-    session: undefined,
-    setSessionData: () => set((data: AuthData) => ({session: data})),
-}))
-
 export const useAppStore = create<AppState & Action>()(
     persist(
         (set) => ({
@@ -31,7 +26,7 @@ export const useAppStore = create<AppState & Action>()(
             removeAuthData: () => set({authData: null}),
         }),
         {
-            name: 'app-state', // Key to store data in localStorage
+            name: 'app-state',
         }
     )
 );

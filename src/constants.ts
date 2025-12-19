@@ -19,3 +19,11 @@ export const MealTypes = [
     'Desert',
     'Any'
 ]
+
+export const MealPlanRequirementsSteps = [
+    'General',
+    'Taste',
+    'Practical',
+    'Dietary',
+    'Blacklist'
+]

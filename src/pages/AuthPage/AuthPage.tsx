@@ -1,14 +1,10 @@
 import './AuthPage.scss';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
-import WavingHandIcon from '@mui/icons-material/WavingHand';
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
-import Stack from '@mui/material/Stack';
-import Switch from '@mui/material/Switch';
+import RestaurantIcon from '@mui/icons-material/Restaurant';
 import {useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {useAppStore} from "../../store.ts";
@@ -59,78 +55,176 @@ function AuthPage() {
         navigate('/home');
     }
 
-    const handleModeChange = () => {
-        setMode(mode === AuthModes.login ? AuthModes.register : AuthModes.login);
+    const handleModeChange = (newMode: AuthModes) => {
+        setMode(newMode);
+        setError(undefined);
+    }
+
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' && password.length && email.length && isValidEmail(email)) {
+            handleSubmit();
+        }
     }
 
     return (
-        <div className="auth-page container">
-            <div className="auth-page__text">
-                <div className="auth-page__text__header">
-                    <h1>Hi there!</h1>
-                    <WavingHandIcon sx={{width: "56px", height: "56px", color: "#ffd60a"}}/>
-                </div>
-                <p className="auth-page__text__paragraph">
-                    Create an account or log into existing one to get your tasty recipes
-                </p>
+        <div className="auth-page">
+            <div className="auth-page__background">
+                <div className="auth-page__background__shape auth-page__background__shape--1"></div>
+                <div className="auth-page__background__shape auth-page__background__shape--2"></div>
             </div>
-            <div className="auth-page__form">
-                <Stack direction="row" spacing={1} sx={{alignItems: 'center', justifyContent: 'center'}}>
-                    Log in
-                    <Switch checked={mode === AuthModes.register} onChange={handleModeChange}
-                            inputProps={{'aria-label': 'ant design'}}/>
-                    Register
-                </Stack>
-                <Box>
-                    <InputLabel htmlFor="email">
-                        E-mail
-                    </InputLabel>
-                    <TextField
-                        id="email"
-                        variant="outlined"
-                        type="email"
-                        slotProps={{
-                            input: {
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <EmailIcon/>
-                                    </InputAdornment>
-                                ),
-                            },
-                        }}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </Box>
+            
+            <div className="auth-page__container container">
+                <div className="auth-page__branding">
+                    <div className="auth-page__branding__icon">
+                        <RestaurantIcon sx={{fontSize: '3rem', color: '#fff'}}/>
+                    </div>
+                    <h1 className="auth-page__branding__title">Welcome to Foodie</h1>
+                    <p className="auth-page__branding__subtitle">
+                        Your personal AI chef for creating delicious recipes tailored to your taste
+                    </p>
+                </div>
 
-                <Box>
-                    <InputLabel htmlFor="password">
-                        Password
-                    </InputLabel>
-                    <TextField
-                        id="password"
-                        variant="outlined"
-                        type="password"
-                        slotProps={{
-                            input: {
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <LockIcon/>
-                                    </InputAdornment>
-                                ),
-                            },
-                        }}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </Box>
-                {error && <p className="auth-page__form__error">{error}</p>}
-                <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{backgroundColor: "#abc4ff", marginTop: "1rem"}}
-                    onClick={handleSubmit}
-                    disabled={!password.length || !email.length || !isValidEmail(email)}>
-                    Submit
-                </Button>
+                <div className="auth-page__card">
+                    <div className="auth-page__card__header">
+                        <h2>{mode === AuthModes.login ? 'Welcome Back' : 'Create Account'}</h2>
+                        <p>{mode === AuthModes.login ? 'Sign in to continue your culinary journey' : 'Join us and start exploring amazing recipes'}</p>
+                    </div>
+
+                    <div className="auth-page__card__mode-selector">
+                        <button
+                            className={`auth-page__card__mode-selector__button ${mode === AuthModes.login ? 'active' : ''}`}
+                            onClick={() => handleModeChange(AuthModes.login)}
+                        >
+                            Sign In
+                        </button>
+                        <button
+                            className={`auth-page__card__mode-selector__button ${mode === AuthModes.register ? 'active' : ''}`}
+                            onClick={() => handleModeChange(AuthModes.register)}
+                        >
+                            Sign Up
+                        </button>
+                    </div>
+
+                    <div className="auth-page__card__form">
+                        <div className="auth-page__card__form__field">
+                            <label htmlFor="email">Email Address</label>
+                            <TextField
+                                id="email"
+                                variant="outlined"
+                                type="email"
+                                placeholder="your.email@example.com"
+                                fullWidth
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                onKeyPress={handleKeyPress}
+                                slotProps={{
+                                    input: {
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <EmailIcon sx={{color: 'rgba(0, 0, 0, 0.4)'}}/>
+                                            </InputAdornment>
+                                        ),
+                                    },
+                                }}
+                                sx={{
+                                    '& .MuiOutlinedInput-root': {
+                                        borderRadius: '0.75rem',
+                                        backgroundColor: 'rgba(117, 123, 200, 0.03)',
+                                        '&:hover fieldset': {
+                                            borderColor: 'rgba(117, 123, 200, 0.3)',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: '#757bc8',
+                                        },
+                                    },
+                                }}
+                            />
+                        </div>
+
+                        <div className="auth-page__card__form__field">
+                            <label htmlFor="password">Password</label>
+                            <TextField
+                                id="password"
+                                variant="outlined"
+                                type="password"
+                                placeholder="Enter your password"
+                                fullWidth
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                onKeyPress={handleKeyPress}
+                                slotProps={{
+                                    input: {
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <LockIcon sx={{color: 'rgba(0, 0, 0, 0.4)'}}/>
+                                            </InputAdornment>
+                                        ),
+                                    },
+                                }}
+                                sx={{
+                                    '& .MuiOutlinedInput-root': {
+                                        borderRadius: '0.75rem',
+                                        backgroundColor: 'rgba(117, 123, 200, 0.03)',
+                                        '&:hover fieldset': {
+                                            borderColor: 'rgba(117, 123, 200, 0.3)',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: '#757bc8',
+                                        },
+                                    },
+                                }}
+                            />
+                        </div>
+
+                        {error && (
+                            <div className="auth-page__card__form__error">
+                                <span>⚠️</span>
+                                <p>{error}</p>
+                            </div>
+                        )}
+
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            fullWidth
+                            size="large"
+                            onClick={handleSubmit}
+                            disabled={!password.length || !email.length || !isValidEmail(email)}
+                            sx={{
+                                marginTop: '1rem',
+                                padding: '0.875rem',
+                                borderRadius: '0.75rem',
+                                fontSize: '1rem',
+                                fontWeight: 600,
+                                textTransform: 'none',
+                                background: 'linear-gradient(90deg, #757bc8 0%, #9fa3d4 100%)',
+                                boxShadow: '0 4px 12px rgba(117, 123, 200, 0.3)',
+                                '&:hover': {
+                                    background: 'linear-gradient(90deg, #6a70b8 0%, #8e92c4 100%)',
+                                    boxShadow: '0 6px 16px rgba(117, 123, 200, 0.4)',
+                                },
+                                '&:disabled': {
+                                    background: 'rgba(0, 0, 0, 0.12)',
+                                    boxShadow: 'none',
+                                },
+                            }}
+                        >
+                            {mode === AuthModes.login ? 'Sign In' : 'Create Account'}
+                        </Button>
+                    </div>
+
+                    <div className="auth-page__card__footer">
+                        <p>
+                            {mode === AuthModes.login ? "Don't have an account? " : "Already have an account? "}
+                            <button
+                                onClick={() => handleModeChange(mode === AuthModes.login ? AuthModes.register : AuthModes.login)}
+                                className="auth-page__card__footer__link"
+                            >
+                                {mode === AuthModes.login ? 'Sign up' : 'Sign in'}
+                            </button>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     );

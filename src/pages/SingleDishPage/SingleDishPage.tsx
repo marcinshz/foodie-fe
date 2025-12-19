@@ -1,4 +1,3 @@
-import './SingleDishPage.scss'
 import {useEffect, useState} from 'react'
 import RequirementsForm from "../../components/RequirementsForm/RequirementsForm.tsx";
 import {RequirementTypes} from "../../enums.ts";
@@ -23,7 +22,7 @@ function SingleDishPage() {
     return (
         <div className="single-dish-page container">
             {step === SingleDishPageSteps.Requirements && <RequirementsForm type={RequirementTypes.SingleDish}
-                                                                            setResult={setResult}/>}
+                                                                            setSingleDishResult={setResult}/>}
             {step === SingleDishPageSteps.Result && result && <SingleDishResult result={result}/>}
         </div>
     );
