@@ -1,50 +1,40 @@
-# React + TypeScript + Vite
+# 🍽️ Foodie – AI Food Planning Assistant
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Foodie is an intelligent meal planning application powered by the OpenAI GPT API.  
+Based on a user-defined form with dietary and lifestyle criteria, it generates recipes and complete meal plans along with optimized shopping lists. All generated content can be saved, edited, and reused.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## Expanding the ESLint configuration
+- 🧠 AI Recipe generation
+- 📅 AI Full meal plan creation  
+- 🛒 Automatically optimized shopping lists with checkboxes
+- 🔎 Customization by calories, macros, diet type, allergies, cuisine, preparation time and many more
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+---
 
-- Configure the top-level `parserOptions` property like this:
+## 🧩 Application Modules
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- **Single Dish** – generate a single recipe  
+- **Meal Plan** – generate a complete meal plan  
+- **Shopping List** – aggregated and optimized ingredients  
+- **Saved Items** – manage and modify stored recipes and plans  
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+---
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## 🛠️ Frontend Tech Stack
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- React  
+- TypeScript  
+- Vite
+  
+---
+
+## 🚀 Getting Started
+
+```bash
+git clone https://github.com/yourusername/foodie.git
+cd foodie
+npm install
+npm run dev
