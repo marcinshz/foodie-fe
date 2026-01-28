@@ -1,0 +1,13 @@
+.requirements-form-step{
+  display: grid;
+  grid-template-columns: repeat(2, 25rem);
+  justify-content: center;
+  gap:6rem;
+}
+
+@media screen and (max-width: 960px) {
+  .requirements-form-step {
+    grid-template-columns: initial;
+    grid-template-rows: auto;
+  }
+}

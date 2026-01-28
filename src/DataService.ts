@@ -1,0 +1,353 @@
+import {SingleDishRequirements, SingleDishResultType, MealPlanRequirements, MealPlanResultType} from "./types.ts";
+
+const URL = "http://localhost:3000";
+
+//AUTH ENDPOINTS
+export async function login(email: string, password: string) {
+    const res = await fetch(`${URL}/auth/sign-in`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({username: email, password}),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.message || 'Login failed');
+    }
+
+    return data;
+}
+
+export async function register(email: string, password: string) {
+    const res = await fetch(`${URL}/user`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({username: email, password}),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.message || 'Registration failed');
+    }
+
+    return data;
+}
+
+//SINGLE DISH ENDPOINTS
+export async function generateSingleDishDefault(requirementsInput: SingleDishRequirements) {
+    const res = await fetch(`${URL}/openai/single-dish-default`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requirementsInput),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.message || 'Dish generation failed');
+    }
+
+    return data;
+}
+
+export async function generateSingleDishImage(dishData: SingleDishResultType) {
+    return fetch(`${URL}/openai/single-dish-image`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dishData),
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function saveSingleDish(dishData: SingleDishResultType & { userId: string }) {
+    return fetch(`${URL}/recipe`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dishData),
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function getUserRecipes(userId: string): Promise<(SingleDishResultType & { id: string })[]> {
+    return fetch(`${URL}/recipe/by-user/${userId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function getRecipeById(recipeId: string): Promise<SingleDishResultType & { id: string }> {
+    return fetch(`${URL}/recipe/${recipeId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function deleteRecipe(recipeId: string) {
+    return fetch(`${URL}/recipe/${recipeId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function generateMealPlan(requirementsInput: MealPlanRequirements): Promise<MealPlanResultType> {
+    const res = await fetch(`${URL}/openai/meal-plan-default`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requirementsInput),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.message || 'Meal plan generation failed');
+    }
+
+    return data;
+}
+
+export async function generateMealPlanMultistep(requirementsInput: MealPlanRequirements): Promise<MealPlanResultType> {
+    const res = await fetch(`${URL}/openai/meal-plan-multistep`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requirementsInput),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.message || 'Meal plan generation failed');
+    }
+
+    return data;
+}
+
+export async function generateMealPlanCyclic(requirementsInput: MealPlanRequirements): Promise<MealPlanResultType> {
+    const res = await fetch(`${URL}/openai/meal-plan-cyclic`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requirementsInput),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.message || 'Meal plan generation failed');
+    }
+
+    return data;
+}
+
+export async function saveMealPlan(mealPlanData: MealPlanResultType & { userId: string }) {
+    return fetch(`${URL}/meal-plan`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mealPlanData),
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function getUserMealPlans(userId: string): Promise<(MealPlanResultType & { id: string })[]> {
+    return fetch(`${URL}/meal-plan/by-user/${userId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function getMealPlanById(mealPlanId: string): Promise<MealPlanResultType & { id: string }> {
+    return fetch(`${URL}/meal-plan/${mealPlanId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function deleteMealPlan(mealPlanId: string) {
+    return fetch(`${URL}/meal-plan/${mealPlanId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function updateMealPlan(mealPlanId: string, mealPlanData: MealPlanResultType): Promise<MealPlanResultType & { id: string }> {
+    const res = await fetch(`${URL}/meal-plan/${mealPlanId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(mealPlanData),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.message || 'Meal plan update failed');
+    }
+
+    return data;
+}
+
+export async function replaceDish(replaceRequest: {
+    mealType: string;
+    targetCalories?: number;
+    targetProtein?: number;
+    targetFat?: number;
+    targetCarbs?: number;
+    servings: number;
+    cuisine?: string[];
+    maxTime?: number;
+    difficulty?: string;
+    dietType?: string;
+    highProtein?: boolean;
+    lowFat?: boolean;
+    lowCarbs?: boolean;
+    blacklistedIngredients?: string[];
+    allergens?: string[];
+    currentDishTitle?: string;
+}): Promise<SingleDishResultType> {
+    const res = await fetch(`${URL}/openai/replace-dish`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(replaceRequest),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.message || 'Dish replacement failed');
+    }
+
+    return data;
+}
+
+// Shopping List Endpoints
+export async function pinShoppingList(shoppingListId: string) {
+    return fetch(`${URL}/shopping-list/${shoppingListId}/pin`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function unpinShoppingList(shoppingListId: string) {
+    return fetch(`${URL}/shopping-list/${shoppingListId}/unpin`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function getPinnedUserShoppingLists(userId: string) {
+    return fetch(`${URL}/shopping-list/by-user/${userId}/pinned`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function deleteShoppingList(shoppingListId: string) {
+    return fetch(`${URL}/shopping-list/${shoppingListId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function updateShoppingListItemChecked(shoppingListId: string, itemIndex: number, checked: boolean) {
+    return fetch(`${URL}/shopping-list/${shoppingListId}/item/${itemIndex}/check`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ checked }),
+    }).then(res => {
+        return res.json()
+    }).then((data) => {
+        return data
+    });
+}

@@ -1,35 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './App.scss'
+import {createBrowserRouter, Navigate, RouterProvider,} from "react-router-dom";
+import AuthPage from "./pages/AuthPage/AuthPage.tsx";
+import HomePage from "./pages/HomePage/HomePage.tsx";
+import AuthorizedLayout from "./layouts/AuthorizedLayout.tsx";
+import Navbar from "./components/Navbar/Navbar.tsx";
+import SingleDishPage from "./pages/SingleDishPage/SingleDishPage.tsx";
+import CookBookPage from "./pages/CookBookPage/CookBookPage.tsx";
+import {getMealPlanById, getRecipeById} from "./DataService.ts";
+import MealPlanPage from "./pages/MealPlanPage/MealPlanPage.tsx";
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    const router = createBrowserRouter([
+        {
+            path: "/auth",
+            element: <AuthPage/>,
+        },
+        {
+            path: "/home",
+            element: <AuthorizedLayout/>,
+            children: [
+                {path: '/home/', element: <HomePage/>},
+                {
+                    path: '/home/single-dish', children: [
+                        {path: '/home/single-dish', element: <SingleDishPage/>},
+                        {
+                            path: '/home/single-dish/:id', element: <SingleDishPage/>, loader: async ({params}) => {
+                                if (params.id) {
+                                    return await getRecipeById(params.id);
+                                }
+                            }
+                        },
+                    ]
+                },
+                {
+                    path: '/home/meal-plan', children: [
+                        {path: '/home/meal-plan', element: <MealPlanPage/>},
+                        {
+                            path: '/home/meal-plan/:id', element: <MealPlanPage/>, loader: async ({params}) => {
+                                if (params.id) {
+                                    return await getMealPlanById(params.id);
+                                }
+                            }
+                        },
+                    ]
+                },
+                {path: '/home/cookbook', element: <CookBookPage/>},
+            ]
+        },
+        {
+            path: "*",
+            element: <Navigate to={'/home'}/>
+        }
+    ]);
+
+    return (
+        <>
+            <Navbar/>
+            <RouterProvider router={router}/>
+        </>
+    )
 }
 
 export default App
